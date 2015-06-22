@@ -1,0 +1,5 @@
+check process vault
+  with pidfile /var/vcap/sys/run/vault/vault.pid
+  start program "/var/vcap/jobs/vault/bin/monit_debugger vault_ctl '/var/vcap/jobs/vault/bin/vault_ctl start'"
+  stop program "/var/vcap/jobs/vault/bin/monit_debugger vault_ctl '/var/vcap/jobs/vault/bin/vault_ctl stop'"
+  group vcap

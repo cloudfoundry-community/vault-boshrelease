@@ -1,0 +1,13 @@
+---
+name: vault
+packages: []
+templates:
+  bin/monit_debugger: bin/monit_debugger
+  bin/vault_ctl: bin/vault_ctl
+  config/vault.conf.erb: config/vault.conf
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+properties:
+  vault.leader_address:
+    description: Hostname/IP to the leader/master of the cluster
