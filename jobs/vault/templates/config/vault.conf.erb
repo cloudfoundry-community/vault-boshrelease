@@ -27,4 +27,6 @@ backend "inmem" {
 listener "tcp" {
  address = "<%= p("vault.listener.tcp.address") %>:<%= p("vault.listener.tcp.port") %>"
  tls_disable = <%= p("vault.listener.tcp.tlsdisable") %>
+ <% if p("vault.listener.tcp.tlsdisable") == 0 %>tls_cert_file = "<%= p("vault.listener.tcp.tls_cert_file") %>"<% end %>
+ <% if p("vault.listener.tcp.tlsdisable") == 0 %>tls_key_file = "<%= p("vault.listener.tcp.tls_key_file") %>"<% end %>
 }

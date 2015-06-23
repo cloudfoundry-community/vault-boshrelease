@@ -20,6 +20,10 @@ properties:
   vault.listener.tcp.tlsdisable:
     description: Disable TLS
     default: 1
+  vault.listener.tcp.tls_cert_file:
+    description: TLS Certificate file
+  vault.listener.tcp.tls_key_file:
+    description: TLS Key File
   vault.disable_mlock:
     description: Disable mlock if you're crazy
     default: false
