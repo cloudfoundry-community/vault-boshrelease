@@ -9,10 +9,10 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 export HOME=/var/vcap
 
 
-
-unzip vault/vault_0.1.2_linux_amd64.zip
 cd vault
+unzip vault_0.1.2_linux_amd64.zip
+mkdir $BOSH_INSTALL_TARGET/bin
 #./configure --prefix=${BOSH_INSTALL_TARGET}
 #make -j${CPUS} && make install
 # Alternatively, to copy archive contents:
-cp -a vault/* $BOSH_INSTALL_TARGET
+cp -a vault $BOSH_INSTALL_TARGET/bin

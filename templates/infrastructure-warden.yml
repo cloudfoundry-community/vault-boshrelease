@@ -18,7 +18,7 @@ jobs:
       - name: vault1
         static_ips: (( static_ips(0) ))
   - name: vault_z1
-    instances: 2
+    instances: 0
     networks:
       - name: vault1
         static_ips: ~

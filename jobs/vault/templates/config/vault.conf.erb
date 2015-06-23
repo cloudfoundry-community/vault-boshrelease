@@ -1,0 +1,30 @@
+<% if p("vault.disable_mlock") == true %>disable_mlock = true<% end %>
+<% if p("vault.statsite_addr", "").empty? == false %>statsite_addr = <%= p("vault.statsite_addr") %><% end %>
+<% if p("vault.statsd_addr", "").empty? == false %>statsd_addr = <%= p("vault.statsd_addr") %><% end %>
+<% if p("vault.backend.use_consul", "false") == true %>
+backend "consul"{
+  path = "<%= p("vault.backend.consul.path") %>"
+  <% if p("vault.backend.consul.address", "").empty? == false %>address = "<%= p("vault.backend.consul.address") %>"<% end %>
+  <% if p("vault.backend.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.backend.consul.scheme") %>"<% end %>
+  <% if p("vault.backend.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.backend.consul.datacenter") %>"<% end %>
+  <% if p("vault.backend.consul.token", "").empty? == false %>token = "<%= p("vault.backend.consul.token") %>"<% end %>
+}
+<% elsif p("vault.backend.use_zookeeper", "false") == true %>
+backend "zookeeper" {
+  address = "<%= p("vault.backend.zookeeper.address") %>"
+  path = "<%= p("vault.backend.zookeeper.path") %>"
+}
+<% elsif p("vault.backend.use_file", "false") == true %>
+backend "file" {
+  path = "<%= p("vault.backend.file.path") %>"
+}
+<% else %>
+backend "inmem" {
+}
+<% end %>
+
+
+listener "tcp" {
+ address = "<%= p("vault.listener.tcp.address") %>:<%= p("vault.listener.tcp.port") %>"
+ tls_disable = <%= p("vault.listener.tcp.tlsdisable") %>
+}

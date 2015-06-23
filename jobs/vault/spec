@@ -8,4 +8,54 @@ templates:
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
-  config/vault.conf:  config/server.hcl
+  config/vault.conf.erb:  config/server.hcl
+properties:
+
+  vault.listener.tcp.address:
+    description: Address for TCP connection
+    default: 127.0.0.1
+  vault.listener.tcp.port:
+    description: Port for TCP connection
+    default: 8200
+  vault.listener.tcp.tlsdisable:
+    description: Disable TLS
+    default: 1
+  vault.disable_mlock:
+    description: Disable mlock if you're crazy
+    default: false
+  vault.statsite_addr:
+    description: Address for statsite
+  vault.statsd_addr:
+    description: Address for StatsD
+  vault.backend.use_consul:
+    description: Use Cosul for data store
+    default: false
+  vault.backend.consul.path:
+    description: Path for Consul
+    default: vault/
+  vault.backend.consul.address:
+    description: Address for Consul
+  vault.backend.consul.scheme:
+    description: Scheme for Consul
+  vault.backend.consul.datacenter:
+    description: Datacenter for Consul
+  vault.backend.consul.token:
+    description: Access Token for Consul
+  vault.backend.use_zookeeper:
+    description: Use Zookeeper as data store
+    default: false
+  vault.backend.zookeeper.address:
+    description: Address for Zookeeper
+    default: localhost:2181
+  vault.backend.zookeeper.path:
+    description: Path for Zookeeper
+    default: vault/
+  vault.backend.use_inmem:
+    description: Use In Memory backend
+    default: false
+  vault.backend.use_file:
+    description: Use File backend
+    default: false
+  vault.backend.file.path:
+    description: Path for File backend
+    default: /var/vcap/store/
