@@ -63,3 +63,12 @@ properties:
   vault.backend.file.path:
     description: Path for File backend
     default: /var/vcap/store/
+  vault.backend.s3.bucket:
+    description: S3 bucket name
+  vault.backend.s3.access_key:
+    description: AWS access key
+  vault.backend.s3.secret_key:
+    description: AWS secret key
+  vault.backend.s3.region:
+    description: AWS region
+    default: us-east-1

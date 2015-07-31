@@ -2,4 +2,4 @@
 name: vault
 dependencies: []
 files:
-- vault/vault_0.1.2_linux_amd64.zip
+- vault/vault_0.2.0_linux_amd64.zip
