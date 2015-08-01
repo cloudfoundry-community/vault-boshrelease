@@ -1,0 +1,29 @@
+---
+packages:
+- name: vault
+  version: !binary |-
+    MmRlYTY0MDZkM2YwZDhhZDg1OTM4ZmRmMDY3MmJlYjYyNGIxMWViNA==
+  fingerprint: !binary |-
+    MmRlYTY0MDZkM2YwZDhhZDg1OTM4ZmRmMDY3MmJlYjYyNGIxMWViNA==
+  sha1: !binary |-
+    OGZmMzZmYzlkZDM0MDQzMTNmYTdlMjRhMmM0YzkyZTIwMmNhMTY3ZA==
+  dependencies: []
+jobs:
+- name: vault
+  version: !binary |-
+    YzI0NTBlOWNmOWY3ODE3MzFiMjcyZGRhNTgxYzU4YzBhZTQzNjIyZg==
+  fingerprint: !binary |-
+    YzI0NTBlOWNmOWY3ODE3MzFiMjcyZGRhNTgxYzU4YzBhZTQzNjIyZg==
+  sha1: !binary |-
+    NTMzNWRkMzQwNmYzOGQzOGYzNjQ2Njc2NTBmYzg1MTcxZWMzZjQzYw==
+license:
+  version: !binary |-
+    NjQzZmRmOWQ0MjM3MDI4MGRhN2VhMjI4NDg2NjFkODQ5NzkzOTVhNw==
+  fingerprint: !binary |-
+    NjQzZmRmOWQ0MjM3MDI4MGRhN2VhMjI4NDg2NjFkODQ5NzkzOTVhNw==
+  sha1: !binary |-
+    NWVmYjFlMTAwNmFmZGMyZTJjNDBkMzI4MzkwM2FjMzYxYTM2ZTcwMQ==
+commit_hash: d23b8dac
+uncommitted_changes: true
+name: vault
+version: 0.1.1
