@@ -52,8 +52,8 @@ cat > release/slack_success_message.txt <<EOS
 <!here> New version v${version} released
 EOS
 
-git config --global user.email "ci@localhost"
-git config --global user.name "CI Bot"
+git config --global user.email "drnic+bot@starkandwayne.com"
+git config --global user.name "Stark and Wayne CI Bot"
 
 git merge --no-edit ${promotion_branch}
 
