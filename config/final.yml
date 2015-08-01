@@ -1,4 +1,5 @@
 ---
+final_name: vault
 blobstore:
   provider: s3
   options:

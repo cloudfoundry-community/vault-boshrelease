@@ -1,7 +1,5 @@
 meta:
   environment: (( merge ))
-  dns_root: (( merge ))
-  security_groups: (( merge ))
   persistent_disk: 4096
 
   stemcell:
@@ -9,19 +7,11 @@ meta:
     version: latest
 
 jobs:
-  - name: vault_leader_z1
+  - name: vault_z1
     instances: 1
     networks:
       - name: vault1
     persistent_disk: (( meta.persistent_disk ))
-  - name: vault_z1
-    instances: 2
-    networks:
-      - name: vault1
-    persistent_disk: (( meta.persistent_disk ))
-    properties:
-      vault:
-        leader_address: (( "0.vault-leader-z1.vault1." meta.environment "." meta.dns_root ))
 
 compilation:
   cloud_properties:

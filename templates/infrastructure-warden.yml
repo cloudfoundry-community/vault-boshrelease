@@ -12,19 +12,11 @@ update:
   update_watch_time: 1000-30000
 
 jobs:
-  - name: vault_leader_z1
+  - name: vault_z1
     instances: 1
     networks:
       - name: vault1
         static_ips: (( static_ips(0) ))
-  - name: vault_z1
-    instances: 0
-    networks:
-      - name: vault1
-        static_ips: ~
-    properties:
-      vault:
-        leader_address: (( jobs.vault_leader_z1.networks.vault1.static_ips.[0] ))
 
 compilation:
   cloud_properties:
@@ -42,65 +34,65 @@ networks:
   subnets:
   - cloud_properties:
       name: random
-    range: 10.244.2.0/30
+    range: 10.244.8.0/30
     reserved:
-    - 10.244.2.1
+    - 10.244.8.1
     static:
-    - 10.244.2.2
+    - 10.244.8.2
 
   - cloud_properties:
       name: random
-    range: 10.244.2.4/30
+    range: 10.244.8.4/30
     reserved:
-    - 10.244.2.5
+    - 10.244.8.5
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.8/30
+    range: 10.244.8.8/30
     reserved:
-    - 10.244.2.9
+    - 10.244.8.9
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.12/30
+    range: 10.244.8.12/30
     reserved:
-    - 10.244.2.13
+    - 10.244.8.13
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.16/30
+    range: 10.244.8.16/30
     reserved:
-    - 10.244.2.17
+    - 10.244.8.17
     static: []
 
   # Bonus double-sized network required due to BOSH oddity
   - cloud_properties:
       name: random
-    range: 10.244.2.20/30
+    range: 10.244.8.20/30
     reserved:
-    - 10.244.2.21
+    - 10.244.8.21
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.24/30
+    range: 10.244.8.24/30
     reserved:
-    - 10.244.2.25
+    - 10.244.8.25
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.28/30
+    range: 10.244.8.28/30
     reserved:
-    - 10.244.2.29
+    - 10.244.8.29
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.32/30
+    range: 10.244.8.32/30
     reserved:
-    - 10.244.2.33
+    - 10.244.8.33
     static: []
   - cloud_properties:
       name: random
-    range: 10.244.2.36/30
+    range: 10.244.8.36/30
     reserved:
-    - 10.244.2.37
+    - 10.244.8.37
     static: []

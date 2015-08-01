@@ -9,15 +9,6 @@ update:
   serial: false
 
 jobs:
-  - name: vault_leader_z1
-    templates:
-    - name: vault
-      release: vault
-    instances: 0
-    resource_pool: small_z1
-    networks: (( merge ))
-    persistent_disk: 0
-    properties: {}
   - name: vault_z1
     templates:
     - name: vault
@@ -26,11 +17,8 @@ jobs:
     resource_pool: small_z1
     networks: (( merge ))
     persistent_disk: 0
-    update:
-      canaries: 10
-    properties:
-      vault:
-        leader_address: (( merge ))
+    properties: {}
+
 
 networks: (( merge ))
 
