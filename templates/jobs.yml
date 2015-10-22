@@ -17,8 +17,7 @@ jobs:
     resource_pool: small_z1
     networks: (( merge ))
     persistent_disk: 0
-    properties: {}
-
+    properties: (( merge ))
 
 networks: (( merge ))
 
