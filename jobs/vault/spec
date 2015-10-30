@@ -10,10 +10,9 @@ templates:
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/vault.conf.erb:  config/server.hcl
 properties:
-
   vault.listener.tcp.address:
     description: Address for TCP connection
-    default: 127.0.0.1
+    default: 0.0.0.0
   vault.listener.tcp.port:
     description: Port for TCP connection
     default: 8200

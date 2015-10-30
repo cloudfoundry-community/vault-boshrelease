@@ -3,7 +3,7 @@ meta:
   persistent_disk: 4096
 
   stemcell:
-    name: bosh-aws-xen-ubuntu
+    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
     version: latest
 
 jobs:
@@ -15,18 +15,11 @@ jobs:
 
 compilation:
   cloud_properties:
-    instance_type: m1.small
+    instance_type: m3.medium
 
 resource_pools:
   - name: small_z1
     cloud_properties:
       instance_type: m1.small
 
-networks:
-  - name: floating
-    type: vip
-    cloud_properties: {}
-  - name: vault1
-    type: dynamic
-    cloud_properties:
-      security_groups: (( meta.security_groups ))
+networks: (( merge ))
