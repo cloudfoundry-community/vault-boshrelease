@@ -7,3 +7,7 @@ vault/vault_0.2.0_linux_amd64.zip:
   object_id: 7f0cb3df-0f7c-4878-a800-c8ae0b1d05ef
   sha: 7d1b1eb416de81d77677cd6dd05f202dbb379aa9
   size: 5555790
+vault/vault_0.3.1_linux_amd64.zip:
+  object_id: 59ce5859-11bb-453a-b537-646940c005b0
+  sha: 8d7f10bd46b2ef53e86cb8399f370f8305642898
+  size: 7129160
