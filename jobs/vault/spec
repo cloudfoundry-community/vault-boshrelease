@@ -94,3 +94,7 @@ properties:
   vault.backend.s3.region:
     description: AWS region
     default: us-east-1
+  vault.backend.s3.endpoint:
+    description: AWS S3 endpoint
+  vault.backend.s3.session_token:
+    description: AWS session token
