@@ -19,7 +19,7 @@ backend "file" {
   path = "<%= p("vault.backend.file.path") %>"
 }
 <% elsif p("vault.backend.use_s3", "false") == true %>
-backend "S3" {
+backend "s3" {
   bucket = "<%= p('vault.backend.s3.bucket') %>"
   access_key = "<%= p('vault.backend.s3.access_key') %>"
   secret_key = "<%= p('vault.backend.s3.secret_key') %>"
