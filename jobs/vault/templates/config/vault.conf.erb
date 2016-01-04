@@ -18,12 +18,14 @@ backend "zookeeper" {
 backend "file" {
   path = "<%= p("vault.backend.file.path") %>"
 }
-<% elsif p("vault.backend.s3", "false") == true %>
-backend "S3" {
+<% elsif p("vault.backend.use_s3", "false") == true %>
+backend "s3" {
   bucket = "<%= p('vault.backend.s3.bucket') %>"
-	access_key = "<%= p('vault.backend.s3.access_key') %>"
-	secret_key = "<%= p('vault.backend.s3.secret_key') %>"
-	region = "<%= p('vault.backend.s3.region') %>"
+  access_key = "<%= p('vault.backend.s3.access_key') %>"
+  secret_key = "<%= p('vault.backend.s3.secret_key') %>"
+  region = "<%= p('vault.backend.s3.region') %>"
+  <% if p("vault.backend.s3.endpoint", "").empty? == false %>endpoint = "<%= p('vault.backend.s3.endpoint') %>"<% end %>
+  <% if p("vault.backend.s3.session_token", "").empty? == false %>session_token = "<%= p('vault.backend.s3.session_token') %>"<% end %>
 }
 <% else %>
 backend "inmem" {

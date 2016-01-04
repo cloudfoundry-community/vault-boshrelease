@@ -30,6 +30,10 @@ properties:
     description: Address for statsite
   vault.statsd_addr:
     description: Address for StatsD
+
+  #
+  # Consul backend
+  #
   vault.backend.use_consul:
     description: Use Cosul for data store
     default: false
@@ -44,6 +48,10 @@ properties:
     description: Datacenter for Consul
   vault.backend.consul.token:
     description: Access Token for Consul
+
+  #
+  # Zookeeper backend
+  #
   vault.backend.use_zookeeper:
     description: Use Zookeeper as data store
     default: false
@@ -53,15 +61,30 @@ properties:
   vault.backend.zookeeper.path:
     description: Path for Zookeeper
     default: vault/
+
+  #
+  # In-Memory backend
+  #
   vault.backend.use_inmem:
     description: Use In Memory backend
     default: false
+
+  #
+  # File backend
+  #
   vault.backend.use_file:
     description: Use File backend
     default: false
   vault.backend.file.path:
     description: Path for File backend
     default: /var/vcap/store/
+
+  #
+  # Amazon S3 backend
+  #
+  vault.backend.use_s3:
+    description: Use S3 backend
+    default: false
   vault.backend.s3.bucket:
     description: S3 bucket name
   vault.backend.s3.access_key:
@@ -71,3 +94,7 @@ properties:
   vault.backend.s3.region:
     description: AWS region
     default: us-east-1
+  vault.backend.s3.endpoint:
+    description: AWS S3 endpoint
+  vault.backend.s3.session_token:
+    description: AWS session token
