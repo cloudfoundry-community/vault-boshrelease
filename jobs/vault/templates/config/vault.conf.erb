@@ -18,7 +18,7 @@ backend "zookeeper" {
 backend "file" {
   path = "<%= p("vault.backend.file.path") %>"
 }
-<% elsif p("vault.backend.s3", "false") == true %>
+<% elsif p("vault.backend.use_s3", "false") == true %>
 backend "S3" {
   bucket = "<%= p('vault.backend.s3.bucket') %>"
 	access_key = "<%= p('vault.backend.s3.access_key') %>"
