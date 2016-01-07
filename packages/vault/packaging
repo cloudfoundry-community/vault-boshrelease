@@ -10,7 +10,7 @@ export HOME=/var/vcap
 
 
 cd vault
-unzip vault_0.3.1_linux_amd64.zip
+unzip vault_0.4.0_linux_amd64.zip
 mkdir $BOSH_INSTALL_TARGET/bin
 #./configure --prefix=${BOSH_INSTALL_TARGET}
 #make -j${CPUS} && make install
