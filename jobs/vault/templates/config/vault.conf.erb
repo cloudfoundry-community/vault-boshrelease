@@ -31,11 +31,19 @@ backend "s3" {
 backend "inmem" {
 }
 <% end %>
-
-
+<%
+  tls = false
+  if_p("vault.listener.tcp.tls.certificate", "") do |cert|
+    if_p("vault.listener.tcp.tls.key", "") do |key|
+      if cert != "" and key != ""
+        tls = true
+      end
+    end
+  end
+%>
 listener "tcp" {
  address = "<%= p("vault.listener.tcp.address") %>:<%= p("vault.listener.tcp.port") %>"
- tls_disable = <%= p("vault.listener.tcp.tlsdisable") %>
- <% if p("vault.listener.tcp.tlsdisable") == 0 %>tls_cert_file = "<%= p("vault.listener.tcp.tls_cert_file") %>"<% end %>
- <% if p("vault.listener.tcp.tlsdisable") == 0 %>tls_key_file = "<%= p("vault.listener.tcp.tls_key_file") %>"<% end %>
+ <% if !tls %>tls_disable = 1<% end %>
+ tls_cert_file = "/var/vcap/jobs/vault/ssl/certificate.pem"
+ tls_key_file  = "/var/vcap/jobs/vault/ssl/key.pem"
 }
