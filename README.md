@@ -6,9 +6,15 @@ To use this bosh release, first upload it to your bosh:
 
 ```
 bosh target BOSH_HOST
+bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease
+```
+
+The repository contains code for generating example templates, so
+you probably want to clone it if you haven't done so already:
+
+```
 git clone https://github.com/cloudfoundry-community/vault-boshrelease.git
 cd vault-boshrelease
-bosh upload release releases/vault-1.yml
 ```
 
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster:
