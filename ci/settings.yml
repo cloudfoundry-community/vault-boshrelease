@@ -1,8 +1,9 @@
 ---
 meta:
-  name:   vault-boshrelease
-  target: sw
-  url:    https://ci.vsphere.starkandwayne.com
+  name:    vault-boshrelease
+  release: Vault
+  target:  sw
+  url:     https://ci.vsphere.starkandwayne.com
 
   initial_version: 0.2.1
 
