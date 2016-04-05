@@ -13,13 +13,14 @@
 
 meta:
   name:     (( param "Please name your pipeline" ))
+  release:  (( grab meta.name ))
   target:   (( param "Please identify the name of the target Concourse CI" ))
   pipeline: (( grab meta.name ))
 
   aws:
     bucket:     (( concat meta.name "-pipeline" ))
-    access_key: (( param "Please set your AWS Access Key ID" ))
-    secret_key: (( param "Please set your AWS Secret Key ID" ))
+    access_key: (( param "Please set your AWS Access Key ID for your pipeline S3 Bucket" ))
+    secret_key: (( param "Please set your AWS Secret Key ID for your pipeline S3 Bucket" ))
 
   github:
     uri:          (( concat "git@github.com:" meta.github.owner "/" meta.github.repo ))
@@ -27,7 +28,7 @@ meta:
     repo:         (( param "Please specify the name of the Github repository" ))
     branch:       master
     private_key:  (( param "Please generate an SSH Deployment Key for this repo and specify it here" ))
-    access_token: (( param "Please generate a Personal Access Token and specify it here" ))
+    access_token: (( param "Please generate a Personal Access Token to be used for creating github releases (do you have a ci-bot?)" ))
 
   bosh-lite:
     target:   (( param "Please specify the BOSH target URI for the bosh-lite to run test deployments against" ))
@@ -118,7 +119,7 @@ jobs:
           params:
             REPO_ROOT:    git
             VERSION_FROM: version/number
-            RELEASE_NAME: (( concat meta.name " BOSH Release" ))
+            RELEASE_NAME: (( concat meta.release " BOSH Release" ))
             RELEASE_ROOT: gh
             REPO_OUT:     pushme
             BRANCH:       (( grab meta.github.branch ))
