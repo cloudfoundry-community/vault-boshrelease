@@ -1,0 +1,43 @@
+---
+name: vault-broker
+packages:
+  - vault-broker
+templates:
+  bin/ctl: bin/ctl
+  bin/monit_debugger: bin/monit_debugger
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+properties:
+  vault.broker.guid:
+    description: A unique GUID to use for this service broker inside of Cloud Foundry.
+    default: ''
+
+  vault.broker.username:
+    description: The username for authenticating interaction with Cloud Foundry.
+    default: vault
+  vault.broker.password:
+    description: The password for authenticating interaction with Cloud Foundry.
+    default: vault
+
+  vault.broker.service.name:
+    description: Name of the service, as shown in the marketplace.
+    default: vault
+  vault.broker.service.description:
+    description: A description of the service, also for the marketplace.
+    default: Vault Secure Storage
+  vault.broker.service.tags:
+    description: A list of tags to apply to the service.
+    default: []
+
+  vault.broker.backend.address:
+    description: The address to use when accessing the Vault to set up new policies and manage provisioned services.
+  vault.broker.backend.advertise:
+    description: The address to hand out to bound applications, along with their credentials.  Defaults to `vault.broker.backend.address`.
+    default: ''
+  vault.broker.backend.token:
+    description: The token that the service broker will use when interacting with the Vault.
+  vault.broker.backend.skip_verify:
+    description: Instructs the broker to ignore SSL/TLS certificate problems (self-signedness, domain mismatch, expiration, etc.). Set this at your own risk.
+    default: false

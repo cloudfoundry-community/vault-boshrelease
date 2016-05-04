@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/vault-broker/helpers/ctl_setup.sh 'vault-broker'
+
+export PORT=${PORT:-5000}
+export LANG=en_US.UTF-8
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE $JOB_NAME
+
+    export BROKER_GUID="<%= p('vault.broker.guid') %>"
+
+    export AUTH_USERNAME="<%= p('vault.broker.username') %>"
+    export AUTH_PASSWORD="<%= p('vault.broker.password') %>"
+
+    export SERVICE_NAME="<%= p('vault.broker.service.name') %>"
+    export SERVICE_DESC="<%= p('vault.broker.service.description') %>"
+    export SERVICE_TAGS="<%= p('vault.broker.service.tags', []).join(', ') %>"
+
+    export VAULT_ADDR="<%= p('vault.broker.backend.address') %>"
+    export VAULT_ADVERTISE="<%= p('vault.broker.backend.advertise') %>"
+    export VAULT_TOKEN="<%= p('vault.broker.backend.token') %>"
+    export VAULT_SKIP_VERIFY="<%= p('vault.broker.backend.skip_verify', false) ? 'yes' : '' %>"
+
+    # store pid in $PIDFILE
+    echo $$ > $PIDFILE
+
+    exec chpst -u vcap:vcap vault-broker \
+         >>$LOG_DIR/$JOB_NAME.log 2>&1
+
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+
+    ;;
+  *)
+    echo "Usage: vault-broker_ctl {start|stop}"
+
+    ;;
+
+esac
+exit 0

@@ -1,0 +1,5 @@
+check process vault-broker
+  with pidfile /var/vcap/sys/run/vault-broker/vault-broker.pid
+  start program "/var/vcap/jobs/vault-broker/bin/monit_debugger vault-broker_ctl '/var/vcap/jobs/vault-broker/bin/ctl start'"
+  stop program "/var/vcap/jobs/vault-broker/bin/monit_debugger vault-broker_ctl '/var/vcap/jobs/vault-broker/bin/ctl stop'"
+  group vcap
