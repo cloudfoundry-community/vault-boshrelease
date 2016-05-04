@@ -1,35 +1,23 @@
 meta:
-  environment: (( merge ))
-  stemcell: (( merge ))
+  environment: (( param "Infrastructure templates must set an environment"))
+  stemcell:    (( param "Infrastructure templates must choose a stemcell" ))
+  token:       (( param "You will have to specify a token in templates/stub.yml" ))
 
-name: (( meta.environment ))
-
-director_uuid: (( merge ))
-
-releases: (( merge ))
-
-networks: (( merge ))
-
-jobs: (( merge ))
-
-properties: (( merge ))
+name: (( grab meta.environment ))
 
 compilation:
   workers: 6
   network: vault1
   reuse_compilation_vms: true
-  cloud_properties: (( merge ))
 
 update:
   canaries: 1
-  max_in_flight: 1
-  canary_watch_time: 30000-60000
-  update_watch_time: 5000-60000
+  max_in_flight: 5
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
   serial: false
 
 resource_pools:
   - name: small_z1
     network: vault1
-    size: (( auto ))
-    stemcell: (( meta.stemcell ))
-    cloud_properties: (( merge ))
+    stemcell: (( grab meta.stemcell ))

@@ -2,7 +2,7 @@ meta:
   environment: vault-warden
 
   stemcell:
-    name: bosh-warden-boshlite-ubuntu
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
     version: latest
 
 update:
@@ -12,11 +12,16 @@ update:
   update_watch_time: 1000-30000
 
 jobs:
-  - name: vault_z1
+  - name: vault
     instances: 1
     networks:
       - name: vault1
-        static_ips: (( static_ips(0) ))
+        static_ips: (( static_ips 1 ))
+  - name: broker
+    instances: 1
+    networks:
+      - name: vault1
+        static_ips: (( static_ips 0 ))
 
 compilation:
   cloud_properties:
@@ -29,70 +34,9 @@ resource_pools:
 
 networks:
 - name: vault1
-  # Assumes up to 5 VMs, including 1 static and 4 dynamic.
-  # Plus 5 (double the size) unused IPs, due to BOSH bug/quirk.
+  type: manual
   subnets:
-  - cloud_properties:
-      name: random
-    range: 10.244.8.0/30
-    reserved:
-    - 10.244.8.1
+  - range: 10.244.8.0/24
+    gateway: 10.244.8.1
     static:
-    - 10.244.8.2
-
-  - cloud_properties:
-      name: random
-    range: 10.244.8.4/30
-    reserved:
-    - 10.244.8.5
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.8/30
-    reserved:
-    - 10.244.8.9
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.12/30
-    reserved:
-    - 10.244.8.13
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.16/30
-    reserved:
-    - 10.244.8.17
-    static: []
-
-  # Bonus double-sized network required due to BOSH oddity
-  - cloud_properties:
-      name: random
-    range: 10.244.8.20/30
-    reserved:
-    - 10.244.8.21
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.24/30
-    reserved:
-    - 10.244.8.25
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.28/30
-    reserved:
-    - 10.244.8.29
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.32/30
-    reserved:
-    - 10.244.8.33
-    static: []
-  - cloud_properties:
-      name: random
-    range: 10.244.8.36/30
-    reserved:
-    - 10.244.8.37
-    static: []
+      - 10.244.8.2 - 10.244.8.60
