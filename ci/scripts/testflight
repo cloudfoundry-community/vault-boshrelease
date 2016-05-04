@@ -27,5 +27,6 @@ bosh target ${BOSH_LITE_TARGET}
 bosh -n delete deployment ${BOSH_LITE_DEPLOYMENT} --force || echo "continuing on..."
 bosh -n create release
 bosh -n upload release --rebase || echo "Continuing..."
+export VAULT_TOKEN=decaf-bad
 ./templates/make_manifest warden
 bosh -n deploy

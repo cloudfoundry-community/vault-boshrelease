@@ -67,6 +67,9 @@ echo $DIRECTOR_NAME $DIRECTOR_CPI $DIRECTOR_UUID $STEMCELL
 perl -pi -e "s/PLACEHOLDER-DIRECTOR-UUID/$DIRECTOR_UUID/g" $tmpdir/stub-with-uuid.yml
 perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml
 perl -pi -e "s/STEMCELL/$STEMCELL/g" $tmpdir/stub-with-uuid.yml
+if [[ -n ${VAULT_TOKEN} ]]; then
+	perl -pi -e "s/TOKEN/$VAULT_TOKEN/g" $tmpdir/stub-with-uuid.yml
+fi
 
 if ! [ -x "$(command -v spruce)" ]; then
   echo 'spruce is not installed. Please download at https://github.com/geofffranks/spruce/releases' >&2

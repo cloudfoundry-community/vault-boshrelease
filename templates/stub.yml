@@ -6,6 +6,7 @@ meta:
     - vault
   stemcell:
     name: STEMCELL
+  token: TOKEN
 
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 
