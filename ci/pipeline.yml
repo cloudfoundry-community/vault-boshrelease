@@ -31,9 +31,10 @@ meta:
     access_token: (( param "Please generate a Personal Access Token to be used for creating github releases (do you have a ci-bot?)" ))
 
   bosh-lite:
-    target:   (( param "Please specify the BOSH target URI for the bosh-lite to run test deployments against" ))
-    username: admin
-    password: admin
+    target:     (( param "Please specify the BOSH target URI for the bosh-lite to run test deployments against" ))
+    deployment: (( param "Please specify the name of the local bosh-lite (warden) deployment" ))
+    username:   admin
+    password:   admin
 
   slack:
     webhook:       (( param "Please specify your Slack Incoming Webhook Integration URL" ))
@@ -57,8 +58,7 @@ jobs:
     serial: true
     plan:
       - aggregate:
-          - { get: git }
-          - { get: changes, trigger: true }
+        - { get: git, trigger: true }
       - task: testflight
         config:
           platform: linux
@@ -73,7 +73,7 @@ jobs:
             BOSH_LITE_TARGET:     (( grab meta.bosh-lite.target ))
             BOSH_LITE_USERNAME:   (( grab meta.bosh-lite.username ))
             BOSH_LITE_PASSWORD:   (( grab meta.bosh-lite.password ))
-            BOSH_LITE_DEPLOYMENT: (( concat "ci-" meta.name ))
+            BOSH_LITE_DEPLOYMENT: (( grab meta.bosh-lite.deployment ))
 
   - name: rc
     public: true
@@ -132,23 +132,22 @@ jobs:
             AWS_ACCESS_KEY:       (( grab meta.aws.access_key ))
             AWS_SECRET_KEY:       (( grab meta.aws.secret_key ))
 
-      - aggregate:
-        - put: version
-          params:
-            bump: patch
-        - put: git
-          params:
-            rebase: true
-            repository: pushme/git
-        - put: github
-          params:
-            name:   gh/name
-            tag:    gh/tag
-            body:   gh/notes.md
-            globs: [gh/artifacts/*]
-        - put: s3
-          params:
-            from:  gh/artifacts/.*-(.*).tgz
+      - put: git
+        params:
+          rebase: true
+          repository: pushme/git
+      - put: s3
+        params:
+          from:  gh/artifacts/.*-(.*).tgz
+      - put: github
+        params:
+          name:   gh/name
+          tag:    gh/tag
+          body:   gh/notes.md
+          globs: [gh/artifacts/*]
+      - put: version
+        params:
+          bump: patch
 
 resource_types:
   - name: slack-notification
@@ -163,18 +162,6 @@ resources:
       uri:         (( grab meta.github.uri ))
       branch:      (( grab meta.github.branch ))
       private_key: (( grab meta.github.private_key ))
-  - name: changes
-    type: git
-    source:
-      uri:         (( grab meta.github.uri ))
-      branch:      (( grab meta.github.branch ))
-      private_key: (( grab meta.github.private_key ))
-    paths:
-      - src/**/*
-      - jobs/**/*
-      - packages/**/*
-      - config/blobs.yml
-      - templates/**/*
 
   - name: version
     type: semver
