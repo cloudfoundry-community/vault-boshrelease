@@ -6,7 +6,7 @@ jobs:
     instances: 1
     resource_pool: small_z1
     networks: (( param "Infrastructure templates must set up networks for the `vault` job" ))
-    persistent_disk: 0
+    persistent_disk: (( param "How big should the vault disk be?" ))
 
   - name: broker
     templates:

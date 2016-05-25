@@ -4,6 +4,7 @@ meta:
   stemcell:
     name: bosh-warden-boshlite-ubuntu-trusty-go_agent
     version: latest
+  persistent_disk: 4096
 
 update:
   canaries: 1
@@ -17,6 +18,7 @@ jobs:
     networks:
       - name: vault1
         static_ips: (( static_ips 1 ))
+    persistent_disk: (( grab meta.persistent_disk ))
   - name: broker
     instances: 1
     networks:

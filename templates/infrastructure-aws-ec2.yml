@@ -18,7 +18,6 @@ jobs:
     instances: 1
     networks:
       - name: vault1
-    persistent_disk: (( grab meta.persistent_disk ))
 
 compilation:
   cloud_properties:
