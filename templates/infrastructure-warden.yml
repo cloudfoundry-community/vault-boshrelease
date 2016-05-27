@@ -19,6 +19,11 @@ jobs:
       - name: vault1
         static_ips: (( static_ips 1 ))
     persistent_disk: (( grab meta.persistent_disk ))
+    properties:
+      vault:
+        backend:
+          use_file: true
+
   - name: broker
     instances: 1
     networks:
