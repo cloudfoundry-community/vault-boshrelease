@@ -1,82 +1,115 @@
-# BOSH Release for vault
+Vault - Secure Credentials Storage
+==================================
 
-## Usage
+This [BOSH][bosh] release packages the excellent [Vault][vault]
+software from [Hashicorp][hashicorp], so that you can run your own
+secure credentials storage vault on your BOSH infrastructure,
+today!
 
-To use this bosh release, first upload it to your bosh:
 
-```
-bosh target BOSH_HOST
-bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease
-```
+Getting Started on BOSH-lite
+----------------------------
 
-The repository contains code for generating example templates, so
-you probably want to clone it if you haven't done so already:
+Before you can start spinning a vault, you will need to upload the
+BOSH release to your director:
 
-```
-git clone https://github.com/cloudfoundry-community/vault-boshrelease.git
-cd vault-boshrelease
-```
+    bosh target https://192.168.50.4:25555
+    bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease
 
-For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster:
+You can create a small, working manifest file from this git
+repository:
 
-```
-templates/make_manifest warden
-bosh -n deploy
-```
+    git clone https://github.com/cloudfoundry-community/vault-boshrelease
+    cd vault-boshrelease
+    ./templates/make_manifest warden
+    bosh -n deploy
 
-For AWS EC2, create a single VM:
+Vault should be up and running at
+[http://10.244.8.2:8200](http://10.244.8.2:8200), but it still
+needs some manual setup, due to security precautions.
 
-```
-templates/make_manifest aws-ec2
-bosh -n deploy
-```
+First, you need to initialize the vault:
 
-### Override security groups
+    export VAULT_ADDR=http://10.244.8.2:8200
+    vault init
 
-For AWS & Openstack, the default deployment assumes there is a `default` security group. If you wish to use a different security group(s) then you can pass in additional configuration when running `make_manifest` above.
+This generates a root encryption key for encrypting all of the
+secrets.  At this point, the vault is _sealed_, and you will need
+to unseal it three times, each time with a different key:
 
-Create a file `my-networking.yml`:
+    vault unseal
+    vault unseal
+    vault unseal
 
-``` yaml
+Once unsealed, your vault should be ready for authentication with
+your _initial root token_:
+
+    vault auth
+
+Now, you can put secrets in the vault, and read them back out:
+
+    vault write secret/handshake knock=knock
+    vault read secret/handshake
+
+You may want to look at [safe][safe], an alternative command-line
+utility for Vault that provides higher-level abstractions like
+tree-based listing, secret generation, secure terminal password
+entry, etc.
+
+
+High Availability Concerns
+--------------------------
+
+If you put important things in your Vault, you want it to be
+available, so you can get those important things back out again.
+
+Enter High Availability.
+
+The easiest way to do high availability is to run 3 or more nodes,
+and use the Consul backend.  To do that, you're going to need to
+load the Consul BOSH release from the Cloud Foundry Community:
+
+    bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease
+
+(Having, of course, targeted your BOSH director first.  You _did_
+target your BOSH director first, right?)
+
+Then, just add the consul-y bits to your deployment manifest.
+Here's a barebones (working) example to get you started:
+
+```yaml
 ---
-networks:
-  - name: vault1
-    type: dynamic
-    cloud_properties:
-      security_groups:
-        - vault
+name: ha-vault
+
+jobs:
+- name: vault
+  instances: 3
+  resource_pool: vault
+  persistent_disk: 4096
+  networks:
+    - name: vault
+      static_ips: &ips
+        - 10.244.8.2
+        - 10.244.8.3
+        - 10.244.8.4
+
+  templates:
+    - { release: vault,  name: vault  }
+    - { release: consul, name: consul }
+
+  properties:
+    consul:
+      join_hosts: *ips
+
+    vault:
+      backend:
+        use_consul: true
 ```
 
-Where `- vault` means you wish to use an existing security group called `vault`.
-
-You now suffix this file path to the `make_manifest` command:
-
-```
-templates/make_manifest openstack-nova my-networking.yml
-bosh -n deploy
-```
-
-### Development
-
-As a developer of this release, create new releases and upload them:
-
-```
-bosh create release --force && bosh -n upload release
-```
-
-### Final releases
-
-To share final releases:
-
-```
-bosh create release --final
-```
-
-By default the version number will be bumped to the next major number. You can specify alternate versions:
 
 
-```
-bosh create release --final --version 2.1
-```
 
-After the first release you need to contact [Dmitriy Kalinin](mailto://dkalinin@pivotal.io) to request your project is added to https://bosh.io/releases (as mentioned in README above).
+[BOSH]:      https://bosh.io
+[vault]:     https://vaultproject.io
+[hashicorp]: https://hashicorp.com
+[safe]:      https://github.com/jhunt/safe
