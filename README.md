@@ -25,12 +25,12 @@ repository:
     bosh -n deploy
 
 Vault should be up and running at
-[http://10.244.8.2:8200](http://10.244.8.2:8200), but it still
+[http://10.244.8.3:8200](http://10.244.8.3:8200), but it still
 needs some manual setup, due to security precautions.
 
 First, you need to initialize the vault:
 
-    export VAULT_ADDR=http://10.244.8.2:8200
+    export VAULT_ADDR=http://10.244.8.3:8200
     vault init
 
 This generates a root encryption key for encrypting all of the
