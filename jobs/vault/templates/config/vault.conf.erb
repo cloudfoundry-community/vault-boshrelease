@@ -1,6 +1,26 @@
 <% if p("vault.disable_mlock") == true %>disable_mlock = true<% end %>
 <% if p("vault.statsite_addr", "").empty? == false %>statsite_addr = <%= p("vault.statsite_addr") %><% end %>
 <% if p("vault.statsd_addr", "").empty? == false %>statsd_addr = <%= p("vault.statsd_addr") %><% end %>
+<%
+  tls = false
+  schema = "http"
+  if_p("vault.listener.tcp.tls.certificate", "") do |cert|
+    if_p("vault.listener.tcp.tls.key", "") do |key|
+      if cert != "" and key != ""
+        tls = true
+        schema = "https"
+      end
+    end
+  end
+%>
+<%
+  advertise_addr=""
+  unless p("vault.ha.domain","").empty?
+    hostname = p("vault.ha.name").gsub('(deployment)', spec.deployment.to_s)
+                                 .gsub('(index)',      spec.index.to_s)
+    advertise_addr = "advertise_addr = \"#{schema}://#{hostname}.#{p("vault.ha.domain")}:#{p("vault.listener.tcp.port")}\""
+  end
+%>
 <% if p("vault.backend.use_consul", "false") == true %>
 backend "consul"{
   path = "<%= p("vault.backend.consul.path") %>"
@@ -8,11 +28,13 @@ backend "consul"{
   <% if p("vault.backend.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.backend.consul.scheme") %>"<% end %>
   <% if p("vault.backend.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.backend.consul.datacenter") %>"<% end %>
   <% if p("vault.backend.consul.token", "").empty? == false %>token = "<%= p("vault.backend.consul.token") %>"<% end %>
+  <%= advertise_addr %>
 }
 <% elsif p("vault.backend.use_zookeeper", "false") == true %>
 backend "zookeeper" {
   address = "<%= p("vault.backend.zookeeper.address") %>"
   path = "<%= p("vault.backend.zookeeper.path") %>"
+  <%= advertise_addr %>
 }
 <% elsif p("vault.backend.use_file", "false") == true %>
 backend "file" {
@@ -26,21 +48,12 @@ backend "s3" {
   region = "<%= p('vault.backend.s3.region') %>"
   <% if p("vault.backend.s3.endpoint", "").empty? == false %>endpoint = "<%= p('vault.backend.s3.endpoint') %>"<% end %>
   <% if p("vault.backend.s3.session_token", "").empty? == false %>session_token = "<%= p('vault.backend.s3.session_token') %>"<% end %>
+  <%= advertise_addr %>
 }
 <% else %>
 backend "inmem" {
 }
 <% end %>
-<%
-  tls = false
-  if_p("vault.listener.tcp.tls.certificate", "") do |cert|
-    if_p("vault.listener.tcp.tls.key", "") do |key|
-      if cert != "" and key != ""
-        tls = true
-      end
-    end
-  end
-%>
 listener "tcp" {
  address = "<%= p("vault.listener.tcp.address") %>:<%= p("vault.listener.tcp.port") %>"
  <% if !tls %>tls_disable = 1<% end %>
