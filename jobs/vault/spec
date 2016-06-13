@@ -24,6 +24,12 @@ properties:
   vault.listener.tcp.tls.key:
     description: Contents of the PEM-encoded TLS server private key
 
+  vault.ha.name:
+    description: "The DNS hostname to advertise in HA configuration.  The keywords (deployment) and (index) will be replaced by the configured deployment and instance index (i.e. 'prod-vault' and '3')"
+    default: "(deployment)-(index)"
+  vault.ha.domain:
+    description: "The DNS domain name to advertise in HA configuration.  If unspecified, advertise_addr will not be set."
+
   vault.disable_mlock:
     description: Disable mlock if you're crazy
     default: false
