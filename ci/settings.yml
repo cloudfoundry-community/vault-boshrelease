@@ -1,6 +1,6 @@
 ---
 meta:
-  name:    vault-boshrelease
+  name:    vault
   release: Vault
   target:  sw
   url:     https://ci.vsphere.starkandwayne.com
