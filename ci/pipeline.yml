@@ -13,7 +13,7 @@
 
 meta:
   name:     (( param "Please name your pipeline" ))
-  release:  (( concat meta.name "-boshrelease" ))
+  release:  (( grab meta.name ))
   target:   (( param "Please identify the name of the target Concourse CI" ))
   pipeline: (( concat meta.name "-boshrelease" ))
 
@@ -138,7 +138,7 @@ jobs:
           repository: pushme/git
       - put: s3
         params:
-          from:  gh/artifacts/.*-(.*).tgz
+          file:  (( concat "gh/artifacts/" meta.name "-*.tgz" ))
       - put: github
         params:
           name:   gh/name
