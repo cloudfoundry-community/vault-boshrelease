@@ -1,0 +1,29 @@
+---
+packages:
+- name: vault
+  version: fdbbf660a3ab64400cb1967cc2d794d2ae8c7992
+  fingerprint: fdbbf660a3ab64400cb1967cc2d794d2ae8c7992
+  sha1: 12e47d4a33ae90f57497ec27b4c54ceba3f51bdb
+  dependencies: []
+- name: vault-broker
+  version: 697c39e211f724d35d8255f05a80b56c63c44c73
+  fingerprint: 697c39e211f724d35d8255f05a80b56c63c44c73
+  sha1: 527a587f0f8abe853eb7e7ec168e9d69426966c8
+  dependencies: []
+jobs:
+- name: vault
+  version: dc164cfbf73bc903890a03c30f626f4f22d70b40
+  fingerprint: dc164cfbf73bc903890a03c30f626f4f22d70b40
+  sha1: 9d38b795a9c6677ea1676e20a94844c702df2f60
+- name: vault-broker
+  version: 40b7f1680988739d4c9776335a3b41cca313256d
+  fingerprint: 40b7f1680988739d4c9776335a3b41cca313256d
+  sha1: d8eb42347a6a689d891575581a29d8530ebb800a
+license:
+  version: 643fdf9d42370280da7ea22848661d84979395a7
+  fingerprint: 643fdf9d42370280da7ea22848661d84979395a7
+  sha1: 5efb1e1006afdc2e2c40d3283903ac361a36e701
+commit_hash: e0352ba3
+uncommitted_changes: true
+name: vault
+version: 0.4.1
