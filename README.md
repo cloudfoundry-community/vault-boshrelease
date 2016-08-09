@@ -106,10 +106,28 @@ jobs:
         use_consul: true
 ```
 
+Cloud Foundry Service Broker
+----------------------------
 
+Cloud Foundry developers/users can also access the multi-tenant Vault deployment via the Cloud Foundry service broker [`vault-broker`](https://github.com/cloudfoundry-community/vault-broker).
 
+Once you have deployed vault once, initialized it, and obtained the token, you can now re-deploy Vault with the token to enable the service broker:
+
+```
+export VAULT_TOKEN=<TOKEN FROM vault init>
+./make_manifest warden
+bosh deploy
+```
+
+The service broker is now running on `10.244.8.2:5000` and has default credentials `vault:vault`.
+
+As an example, to register it with Cloud Foundry running on the same bosh-lite:
+
+```
+cf create-service-broker vault vault vault http://10.244.8.2:5000
+```
 
 [BOSH]:      https://bosh.io
 [vault]:     https://vaultproject.io
 [hashicorp]: https://hashicorp.com
-[safe]:      https://github.com/jhunt/safe
+[safe]:      https://github.com/starkandwayne/safe
