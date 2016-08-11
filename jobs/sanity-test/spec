@@ -3,6 +3,8 @@ name: sanity-test
 packages: [jq, vault]
 templates:
   bin/run: bin/run
+  bin/run-vault-tests.sh: bin/run-vault-tests.sh
+  bin/run-broker-tests.sh: bin/run-broker-tests.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
@@ -15,3 +17,6 @@ properties:
   vault.broker.password:
     description: The password for authenticating interaction with Cloud Foundry.
     default: vault
+
+  vault.broker.backend.token:
+    description: The token that the service broker will use when interacting with the Vault. If 'TODO' then skip tests.

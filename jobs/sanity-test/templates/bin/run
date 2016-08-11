@@ -6,10 +6,13 @@ set -u # report the usage of uninitialized variables
 # Setup env vars and folders for the webapp_ctl script
 source /var/vcap/jobs/sanity-test/helpers/ctl_setup.sh 'sanity-test'
 
-export BROKER_ADDRESS="<%= p('vault.broker.address') %>"
-export BROKER_USERNAME="<%= p('vault.broker.username') %>"
-export BROKER_PASSWORD="<%= p('vault.broker.password') %>"
+export VAULT_TOKEN="<%= p('vault.broker.backend.token') %>"
+if [[ "${VAULT_TOKEN}" == "TODO" ]]; then
+  echo "SKIPPING SANITY TESTS. \$VAULT_TOKEN set to 'TODO'"
+  exit 0
+fi
 
-curl -u ${BROKER_USERNAME}:${BROKER_PASSWORD} ${BROKER_ADDRESS}/v2/catalog | jq .
+${JOB_DIR}/bin/run-vault-tests.sh
+${JOB_DIR}/bin/run-broker-tests.sh
 
 echo "Errand sanity-test is complete"
