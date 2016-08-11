@@ -1,0 +1,17 @@
+---
+name: sanity-test
+packages: [jq, vault]
+templates:
+  bin/run: bin/run
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+properties:
+  vault.broker.address:
+    description: The base URL for accessing the vault broker
+  vault.broker.username:
+    description: The username for authenticating interaction with Cloud Foundry.
+    default: vault
+  vault.broker.password:
+    description: The password for authenticating interaction with Cloud Foundry.
+    default: vault
