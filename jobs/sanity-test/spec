@@ -5,12 +5,16 @@ templates:
   bin/run: bin/run
   bin/run-vault-tests.sh: bin/run-vault-tests.sh
   bin/run-broker-tests.sh: bin/run-broker-tests.sh
+  bin/create-service: bin/create-service
+  bin/delete-service: bin/delete-service
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
 properties:
-  vault.broker.address:
-    description: The base URL for accessing the vault broker
+  vault.broker.host:
+    description: The hostname for accessing the vault broker
+  vault.broker.port:
+    description: The port for accessing the vault broker
   vault.broker.username:
     description: The username for authenticating interaction with Cloud Foundry.
     default: vault

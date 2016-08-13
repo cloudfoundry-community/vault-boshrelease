@@ -48,7 +48,8 @@ jobs:
     properties:
       vault:
         broker:
-          address: (( concat "http://" jobs.broker.networks[0].static_ips[0] ":5000" ))
+          host: (( grab jobs.broker.networks[0].static_ips[0] ))
+          port: 5000
           username: vault
           password: vault
 
