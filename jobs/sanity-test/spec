@@ -20,3 +20,5 @@ properties:
 
   vault.broker.backend.token:
     description: The token that the service broker will use when interacting with the Vault. If 'TODO' then skip tests.
+  vault.broker.backend.address:
+    description: The address to use when accessing the Vault to set up new policies and manage provisioned services.

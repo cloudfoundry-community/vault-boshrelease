@@ -4,6 +4,8 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 set -x # print commands
 
+export VAULT_ADDR="<%= p('vault.broker.backend.address') %>"
+
 test_value=knock-$(date +"%s" | rev)
 
 vault write secret/handshake sanity-test=${test_value}

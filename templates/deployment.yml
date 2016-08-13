@@ -1,7 +1,7 @@
 meta:
   environment: (( param "Infrastructure templates must set an environment"))
   stemcell:    (( param "Infrastructure templates must choose a stemcell" ))
-  token:       (( param "You will have to specify a token in templates/stub.yml" ))
+  token:       TODO
 
 name: (( grab meta.environment ))
 

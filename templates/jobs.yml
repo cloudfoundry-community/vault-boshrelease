@@ -51,3 +51,7 @@ jobs:
           address: (( concat "http://" jobs.broker.networks[0].static_ips[0] ":5000" ))
           username: vault
           password: vault
+
+          backend:
+            address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
+            token:   (( grab meta.token ))
