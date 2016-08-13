@@ -20,6 +20,9 @@ for plan_id in ${plan_ids[@]}; do
   echo $credentials
   export VAULT_TOKEN=$(echo $credentials | jq -r ".credentials.token")
   export VAULT_ADDR=$(echo $credentials | jq -r ".credentials.vault")
+
+  vault status
+  
   root_path=$(echo $credentials | jq -r ".credentials.root")
 
   test_value=knock-$(date +"%s" | rev)
