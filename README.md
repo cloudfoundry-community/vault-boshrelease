@@ -1,6 +1,8 @@
 Vault - Secure Credentials Storage
 ==================================
 
+Questions? Pop in our [slack channel](https://cloudfoundry.slack.com/messages/vaultt /)!
+
 This [BOSH][bosh] release packages the excellent [Vault][vault]
 software from [Hashicorp][hashicorp], so that you can run your own
 secure credentials storage vault on your BOSH infrastructure,
