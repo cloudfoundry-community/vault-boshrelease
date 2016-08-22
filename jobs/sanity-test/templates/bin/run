@@ -13,6 +13,6 @@ if [[ "${VAULT_TOKEN}" == "TODO" ]]; then
 fi
 
 ${JOB_DIR}/bin/run-vault-tests.sh
-${JOB_DIR}/bin/run-broker-tests.sh
+# ${JOB_DIR}/bin/run-broker-tests.sh
 
 echo "Errand sanity-test is complete"
