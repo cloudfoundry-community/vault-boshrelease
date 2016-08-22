@@ -1,0 +1,28 @@
+---
+name: sanity-test
+packages: [jq, vault]
+templates:
+  bin/run: bin/run
+  bin/run-vault-tests.sh: bin/run-vault-tests.sh
+  bin/run-broker-tests.sh: bin/run-broker-tests.sh
+  bin/create-service: bin/create-service
+  bin/delete-service: bin/delete-service
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+properties:
+  vault.broker.host:
+    description: The hostname for accessing the vault broker
+  vault.broker.port:
+    description: The port for accessing the vault broker
+  vault.broker.username:
+    description: The username for authenticating interaction with Cloud Foundry.
+    default: vault
+  vault.broker.password:
+    description: The password for authenticating interaction with Cloud Foundry.
+    default: vault
+
+  vault.broker.backend.token:
+    description: The token that the service broker will use when interacting with the Vault. If 'TODO' then skip tests.
+  vault.broker.backend.address:
+    description: The address to use when accessing the Vault to set up new policies and manage provisioned services.

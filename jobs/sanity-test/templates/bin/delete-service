@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -u
+set -e
+set -x
+
+service_id=$1
+plan_id=$2
+instance_id=$3
+binding_id=$4
+
+curl -sf ${BROKER_URI}/v2/service_instances/${instance_id}/service_bindings/${binding_id}\?plan_id=${plan_id}\&service_id=${service_id} \
+     -XDELETE
+
+curl -sf ${BROKER_URI}/v2/service_instances/${instance_id}\?plan_id=${plan_id}\&service_id=${service_id} \
+     -XDELETE

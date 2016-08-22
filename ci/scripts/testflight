@@ -41,9 +41,12 @@ header "Creating candidate BOSH release..."
 bosh -n create release
 bosh -n upload release --rebase || echo "Continuing..."
 
-header "Deploying to BOSH-lite..."
+header "Deploying to BOSH-lite with vault.backend.use_file..."
 ./templates/make_manifest warden
 bosh -n deploy
+
+header "Sanity tests"
+bosh -n run errand sanity-test
 
 header "Cleaning up..."
 bosh -n delete deployment ${BOSH_LITE_DEPLOYMENT} --force || echo "continuing on..."

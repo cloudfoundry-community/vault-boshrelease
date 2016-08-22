@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/sanity-test/helpers/ctl_setup.sh 'sanity-test'
+
+export VAULT_TOKEN="<%= p('vault.broker.backend.token') %>"
+if [[ "${VAULT_TOKEN}" == "TODO" ]]; then
+  echo "SKIPPING SANITY TESTS. \$VAULT_TOKEN set to 'TODO'"
+  exit 0
+fi
+
+${JOB_DIR}/bin/run-vault-tests.sh
+# ${JOB_DIR}/bin/run-broker-tests.sh
+
+echo "Errand sanity-test is complete"

@@ -7,3 +7,7 @@ vault/vault_0.6.0_linux_amd64.zip:
   object_id: 9e1b9cbc-38b5-46fe-be05-4ddcc5825185
   sha: ec1115ba639870a63460884a59b44c77b0c71221
   size: 10516894
+jq/jq-linux64-1.5:
+  object_id: 9302e872-a5fc-4141-b985-033d47829089
+  sha: d8e36831c3c94bb58be34dd544f44a6c6cb88568
+  size: 3027945

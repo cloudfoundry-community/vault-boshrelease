@@ -36,3 +36,23 @@ jobs:
           backend:
             address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
             token:   (( grab meta.token ))
+
+  - name: sanity-test
+    templates:
+    - { release: vault, name: sanity-test }
+    instances: 1
+    lifecycle: errand
+    resource_pool: small_z1
+    networks: (( param "Infrastructure templates must set up networks for the `vault` job" ))
+    persistent_disk: 0
+    properties:
+      vault:
+        broker:
+          host: (( grab jobs.broker.networks[0].static_ips[0] ))
+          port: 5000
+          username: vault
+          password: vault
+
+          backend:
+            address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
+            token:   (( grab meta.token ))

@@ -30,6 +30,10 @@ jobs:
       - name: vault1
         static_ips: (( static_ips 0 ))
 
+  - name: sanity-test
+    instances: 1
+    networks: [{name: vault1}]
+
 compilation:
   cloud_properties:
     name: random

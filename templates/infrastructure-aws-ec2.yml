@@ -11,13 +11,14 @@ meta:
 jobs:
   - name: vault
     instances: 1
-    networks:
-      - name: vault1
+    networks: [{name: vault1}]
     persistent_disk: (( grab meta.persistent_disk ))
   - name: broker
     instances: 1
-    networks:
-      - name: vault1
+    networks: [{name: vault1}]
+  - name: sanity-test
+    instances: 1
+    networks: [{name: vault1}]
 
 compilation:
   cloud_properties:
