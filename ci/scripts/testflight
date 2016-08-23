@@ -45,9 +45,6 @@ header "Deploying to BOSH-lite with vault.backend.use_file..."
 ./templates/make_manifest warden
 bosh -n deploy
 
-# immediately running vault init fails
-sleep 15
-
 header "Initialize and unseal vault"
 export VAULT_ADDR=http://10.58.111.44:8200
 seals_token=$(vault init)
@@ -55,12 +52,15 @@ vault unseal $(echo $seals_token | grep 'Unseal Key 1' | awk '{print $4}')
 vault unseal $(echo $seals_token | grep 'Unseal Key 2' | awk '{print $4}')
 vault unseal $(echo $seals_token | grep 'Unseal Key 3' | awk '{print $4}')
 export VAULT_TOKEN=$(echo $seals_token | grep 'Initial Root Token' | awk '{print $4}')
+echo root token $VAULT_TOKEN
 
 cat > token.yml <<EOF
 ---
 meta:
-	token: ${VAULT_TOKEN}
+	token: "${VAULT_TOKEN}"
 EOF
+cat token.yml
+
 ./templates/make_manifest warden token.yml
 bosh -n deploy
 
