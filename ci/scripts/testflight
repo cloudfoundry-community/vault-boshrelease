@@ -45,6 +45,9 @@ header "Deploying to BOSH-lite with vault.backend.use_file..."
 ./templates/make_manifest warden
 bosh -n deploy
 
+# immediately running vault init fails
+sleep 15
+
 header "Initialize and unseal vault"
 export VAULT_ADDR=http://10.244.8.3:8200
 seals_token=$(vault init)
