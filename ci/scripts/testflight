@@ -49,7 +49,7 @@ bosh -n deploy
 sleep 15
 
 header "Initialize and unseal vault"
-export VAULT_ADDR=http://10.244.8.3:8200
+export VAULT_ADDR=http://10.58.111.44:8200
 seals_token=$(vault init)
 vault unseal $(echo $seals_token | grep 'Unseal Key 1' | awk '{print $4}')
 vault unseal $(echo $seals_token | grep 'Unseal Key 2' | awk '{print $4}')
