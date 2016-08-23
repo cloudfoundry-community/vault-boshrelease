@@ -74,17 +74,6 @@ vault unseal $(echo "$seals_token" | grep 'Unseal Key 2' | awk '{print $4}')
 vault unseal $(echo "$seals_token" | grep 'Unseal Key 3' | awk '{print $4}')
 set +x
 
-header "Pre 'sanity-test' errand sanity test"
-test_value=knock-$(date +"%s" | rev)
-vault write secret/handshake sanity-test=${test_value}
-read_value=$(vault read secret/handshake | grep sanity-test | awk '{print $2}')
-if [[ "${read_value}" != "${test_value}" ]]; then
-  echo "ERROR: vault did not return same value written"
-  exit 1
-fi
-
-vault delete secret/handshake
-
 header "Sanity tests"
 bosh -n run errand sanity-test
 
