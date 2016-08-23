@@ -57,7 +57,7 @@ echo root token $VAULT_TOKEN
 cat > token.yml <<EOF
 ---
 meta:
-	token: "${VAULT_TOKEN}"
+  token: "${VAULT_TOKEN}"
 EOF
 cat token.yml
 
