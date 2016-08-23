@@ -48,6 +48,8 @@ bosh -n deploy
 header "Initialize and unseal vault"
 export VAULT_ADDR=http://10.58.111.44:8200
 seals_token=$(vault init)
+echo $seals_token
+
 export VAULT_TOKEN=$(echo $seals_token | grep 'Initial Root Token' | awk '{print $4}')
 
 cat > token.yml <<EOF
@@ -60,9 +62,11 @@ cat token.yml
 ./templates/make_manifest warden token.yml
 bosh -n deploy
 
+set -x
 vault unseal $(echo $seals_token | grep 'Unseal Key 1' | awk '{print $4}')
 vault unseal $(echo $seals_token | grep 'Unseal Key 2' | awk '{print $4}')
 vault unseal $(echo $seals_token | grep 'Unseal Key 3' | awk '{print $4}')
+set +x
 
 header "Pre 'sanity-test' errand sanity test"
 test_value=knock-$(date +"%s" | rev)
