@@ -28,6 +28,7 @@ backend "consul"{
   <% if p("vault.backend.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.backend.consul.scheme") %>"<% end %>
   <% if p("vault.backend.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.backend.consul.datacenter") %>"<% end %>
   <% if p("vault.backend.consul.token", "").empty? == false %>token = "<%= p("vault.backend.consul.token") %>"<% end %>
+  <% if p("vault.backend.consul.redirect_addr", "").empty? == false %>redirect_addr = "<%= p("vault.backend.consul.redirect_addr") %>"<% end %>
   <%= advertise_addr %>
 }
 <% elsif p("vault.backend.use_zookeeper", "false") == true %>

@@ -55,6 +55,8 @@ properties:
     description: Datacenter for Consul
   vault.backend.consul.token:
     description: Access Token for Consul
+  vault.backend.consul.redirect_addr:
+    description: "This is the address to advertise to other Vault servers in the cluster for client redirection."
 
   #
   # Zookeeper backend
