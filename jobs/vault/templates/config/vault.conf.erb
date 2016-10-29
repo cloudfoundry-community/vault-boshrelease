@@ -1,7 +1,8 @@
-<% if p("vault.disable_mlock") == true %>disable_mlock = true<% end %>
-<% if p("vault.statsite_addr", "").empty? == false %>statsite_addr = <%= p("vault.statsite_addr") %><% end %>
-<% if p("vault.statsd_addr", "").empty? == false %>statsd_addr = <%= p("vault.statsd_addr") %><% end %>
 <%
+  telemetry_enabled = false
+  if p("vault.statsite_addr", "").empty? == false or p("vault.statsd_addr", "").empty? == false
+    telemetry_enabled = true
+  end
   tls = false
   schema = "http"
   if_p("vault.listener.tcp.tls.certificate", "") do |cert|
@@ -12,15 +13,41 @@
       end
     end
   end
-%>
-<%
-  advertise_addr=""
+  consul_tls = false
+  if_p("vault.backend.consul.tls.certificate", "") do |consul_cert|
+    if_p("vault.backend.consul.tls.key", "") do |consul_key|
+      if consul_cert != "" and consul_key != ""
+        consul_tls = true
+      end
+    end
+  end
+
+  redirect_addr = ""
+  cluster_addr = ""
+  advertise_addr = ""
+  disable_clustering = ""
   unless p("vault.ha.domain","").empty?
     hostname = p("vault.ha.name").gsub('(deployment)', spec.deployment.to_s)
                                  .gsub('(index)',      spec.index.to_s)
     advertise_addr = "advertise_addr = \"#{schema}://#{hostname}.#{p("vault.ha.domain")}:#{p("vault.listener.tcp.port")}\""
   end
+  if p("vault.ha.redirect_address", "").empty? == false
+    redirect_addr = "redirect_addr = \"#{p("vault.ha.redirect_address")}\""
+  end
+  if p("vault.ha.cluster_address", "").empty? == false
+    cluster_addr = "cluster_addr = \"#{p("vault.ha.cluster_address")}\""
+  end
+  if p("vault.ha.disable_clustering", "false") == true
+    disable_clustering = "disable_clustering = \"#{p("vault.ha.disable_clustering")}\""
+  end
 %>
+<% if telemetry_enabled %>
+telemetry {
+  <% if p("vault.statsite_addr", "").empty? == false %>statsite_addr = <%= p("vault.statsite_addr") %><% end %>
+  <% if p("vault.statsd_addr", "").empty? == false %>statsd_addr = <%= p("vault.statsd_addr") %><% end %>
+}
+<% end %>
+<% if p("vault.disable_mlock") == true %>disable_mlock = true<% end %>
 <% if p("vault.backend.use_consul", "false") == true %>
 backend "consul"{
   path = "<%= p("vault.backend.consul.path") %>"
@@ -28,14 +55,30 @@ backend "consul"{
   <% if p("vault.backend.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.backend.consul.scheme") %>"<% end %>
   <% if p("vault.backend.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.backend.consul.datacenter") %>"<% end %>
   <% if p("vault.backend.consul.token", "").empty? == false %>token = "<%= p("vault.backend.consul.token") %>"<% end %>
-  <% if p("vault.backend.consul.redirect_addr", "").empty? == false %>redirect_addr = "<%= p("vault.backend.consul.redirect_addr") %>"<% end %>
+  <% if p("vault.backend.consul.check_timeout", "").empty? == false %>check_timeout = "<%= p("vault.backend.consul.check_timeout") %>"<% end %>
+  max_parallel = "<%= p("vault.backend.consul.max_parallel") %>"
+  <% if consul_tls %>
+    <% if p("vault.backend.consul.tls.skip_verify", "false") == true %>
+    tls_skip_verify = "true"
+    <% end %>
+    <% if p("vault.backend.consul.tls.min_version", "").empty? == false %>tls_min_version = "<%= p("vault.backend.consul.tls.min_version") %>"<% end %>
+    tls_ca_file = "/var/vcap/jobs/vault/ssl/ca_certificate.pem"
+    tls_cert_file = "/var/vcap/jobs/vault/ssl/consul_certificate.pem"
+    tls_key_file  = "/var/vcap/jobs/vault/ssl/consul_key.pem"
+  <% end %>
   <%= advertise_addr %>
+  <%= redirect_addr %>
+  <%= cluster_addr %>
+  <%= disable_clustering %>
 }
 <% elsif p("vault.backend.use_zookeeper", "false") == true %>
 backend "zookeeper" {
   address = "<%= p("vault.backend.zookeeper.address") %>"
   path = "<%= p("vault.backend.zookeeper.path") %>"
   <%= advertise_addr %>
+  <%= redirect_addr %>
+  <%= cluster_addr %>
+  <%= disable_clustering %>
 }
 <% elsif p("vault.backend.use_file", "false") == true %>
 backend "file" {
@@ -50,6 +93,9 @@ backend "s3" {
   <% if p("vault.backend.s3.endpoint", "").empty? == false %>endpoint = "<%= p('vault.backend.s3.endpoint') %>"<% end %>
   <% if p("vault.backend.s3.session_token", "").empty? == false %>session_token = "<%= p('vault.backend.s3.session_token') %>"<% end %>
   <%= advertise_addr %>
+  <%= redirect_addr %>
+  <%= cluster_addr %>
+  <%= disable_clustering %>
 }
 <% else %>
 backend "inmem" {
@@ -60,4 +106,5 @@ listener "tcp" {
  <% if !tls %>tls_disable = 1<% end %>
  tls_cert_file = "/var/vcap/jobs/vault/ssl/certificate.pem"
  tls_key_file  = "/var/vcap/jobs/vault/ssl/key.pem"
+ tls_min_version = "<%= p("vault.listener.tcp.tls.min_version") %>"
 }
