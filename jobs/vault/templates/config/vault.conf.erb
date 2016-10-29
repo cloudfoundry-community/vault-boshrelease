@@ -71,15 +71,6 @@ backend "consul"{
   <%= cluster_addr %>
   <%= disable_clustering %>
 }
-<% elsif p("vault.backend.use_zookeeper", "false") == true %>
-backend "zookeeper" {
-  address = "<%= p("vault.backend.zookeeper.address") %>"
-  path = "<%= p("vault.backend.zookeeper.path") %>"
-  <%= advertise_addr %>
-  <%= redirect_addr %>
-  <%= cluster_addr %>
-  <%= disable_clustering %>
-}
 <% elsif p("vault.backend.use_file", "false") == true %>
 backend "file" {
   path = "<%= p("vault.backend.file.path") %>"

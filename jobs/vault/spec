@@ -95,19 +95,6 @@ properties:
     description: Contents of the PEM-encoded TLS server private key
 
   #
-  # Zookeeper backend
-  #
-  vault.backend.use_zookeeper:
-    description: Use Zookeeper as data store
-    default: false
-  vault.backend.zookeeper.address:
-    description: Address for Zookeeper
-    default: localhost:2181
-  vault.backend.zookeeper.path:
-    description: Path for Zookeeper
-    default: vault/
-
-  #
   # In-Memory backend
   #
   vault.backend.use_inmem:
