@@ -1,3 +1,4 @@
 # Improvements
 
-- Vault was bumped to version 0.6.1
+- Vault was bumped to version 0.6.2
+

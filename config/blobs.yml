@@ -3,15 +3,11 @@ vault-broker/vault-broker:
   object_id: 658e61c5-124d-46a3-a550-1c08afbb1710
   sha: 9b99db6f8e53f4ba2c5d551a446304a4600e4e78
   size: 7802696
-vault/vault_0.6.0_linux_amd64.zip:
-  object_id: 9e1b9cbc-38b5-46fe-be05-4ddcc5825185
-  sha: ec1115ba639870a63460884a59b44c77b0c71221
-  size: 10516894
 jq/jq-linux64-1.5:
   object_id: 9302e872-a5fc-4141-b985-033d47829089
   sha: d8e36831c3c94bb58be34dd544f44a6c6cb88568
   size: 3027945
-vault/vault_0.6.1_linux_amd64.zip:
-  object_id: f7e51d2d-e4a3-48a4-8db5-c843e4c4845f
-  sha: 93eb9406e85fd5fb792c6ca38cc8fc4b953dbca5
-  size: 10884131
+vault/vault_0.6.2_linux_amd64.zip:
+  object_id: 739cc32f-d79d-40da-ab21-d82a9d80dc2f
+  sha: d6f841e2f980875fa36c02bf81f43691e314e360
+  size: 11242740
