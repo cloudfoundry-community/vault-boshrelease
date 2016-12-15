@@ -43,8 +43,8 @@
 %>
 <% if telemetry_enabled %>
 telemetry {
-  <% if p("vault.statsite_addr", "").empty? == false %>statsite_addr = <%= p("vault.statsite_addr") %><% end %>
-  <% if p("vault.statsd_addr", "").empty? == false %>statsd_addr = <%= p("vault.statsd_addr") %><% end %>
+  <% if p("vault.statsite_addr", "").empty? == false %>statsite_address = "<%= p("vault.statsite_addr") %>"<% end %>
+  <% if p("vault.statsd_addr", "").empty? == false %>statsd_address = "<%= p("vault.statsd_addr") %>"<% end %>
 }
 <% end %>
 <% if p("vault.disable_mlock") == true %>disable_mlock = true<% end %>
