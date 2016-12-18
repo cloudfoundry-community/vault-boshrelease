@@ -47,7 +47,7 @@ networks:
 - name: vault1
   type: manual
   subnets:
-  - range: 10.244.8.0/24
-    gateway: 10.244.8.1
+  - range: 10.244.9.0/24
+    gateway: 10.244.9.1
     static:
-      - 10.244.8.2 - 10.244.8.60
+      - 10.244.9.2 - 10.244.9.60
