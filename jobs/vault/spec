@@ -37,6 +37,17 @@ properties:
     description: Port for cluster address required for server-to-server connection
     default: 8201
 
+  #
+  # Telemetry configuration
+  #
+  vault.telemetry.statsite_addr:
+    description: Address for statsite
+  vault.telemetry.statsd_addr:
+    description: Address for StatsD
+  vault.telemetry.disable_hostname:
+    description: Whether or not to prepend runtime telemetry with the machines hostname. This is a global option.
+    default: false
+
   vault.ha.name:
     description: "The DNS hostname to advertise in HA configuration.  The keywords (deployment) and (index) will be replaced by the configured deployment and instance index (i.e. 'prod-vault' and '3')"
     default: "(deployment)-(index)"
@@ -53,10 +64,6 @@ properties:
   vault.disable_mlock:
     description: Disable mlock if you're crazy
     default: false
-  vault.statsite_addr:
-    description: Address for statsite
-  vault.statsd_addr:
-    description: Address for StatsD
 
   #
   # Consul backend
