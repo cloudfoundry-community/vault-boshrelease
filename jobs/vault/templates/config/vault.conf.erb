@@ -33,6 +33,9 @@
   end
   if p("vault.ha.redirect_address", "").empty? == false
     redirect_addr = "redirect_addr = \"#{p("vault.ha.redirect_address")}\""
+  else
+    port = p("vault.listener.tcp.port")
+    redirect_addr = "redirect_addr = \"#{schema}://#{spec.address}:#{port}\""
   end
   if p("vault.ha.cluster_address", "").empty? == false
     cluster_addr = "cluster_addr = \"#{p("vault.ha.cluster_address")}\""
