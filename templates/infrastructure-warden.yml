@@ -5,6 +5,7 @@ meta:
     name: bosh-warden-boshlite-ubuntu-trusty-go_agent
     version: latest
   persistent_disk: 4096
+  redirect: ~
 
 update:
   canaries: 1
@@ -21,6 +22,8 @@ jobs:
     persistent_disk: (( grab meta.persistent_disk ))
     properties:
       vault:
+        ha:
+          redirect: (( grab meta.redirect ))
         backend:
           use_file: true
 

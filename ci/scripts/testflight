@@ -47,12 +47,17 @@ header "Creating candidate BOSH release..."
 bosh -n create release
 bosh -n upload release --rebase || echo "Continuing..."
 
+export VAULT_ADDR=http://10.58.111.44:8200
 header "Deploying to BOSH-lite with vault.backend.use_file..."
-./templates/make_manifest warden
+cat > redir.yml <<EOF
+---
+meta:
+  redirect: ${VAULT_ADDR}
+EOF
+./templates/make_manifest warden redir.yml
 bosh -n deploy
 
 header "Initialize and unseal vault"
-export VAULT_ADDR=http://10.58.111.44:8200
 seals_token=$(vault init)
 echo "$seals_token"
 
@@ -65,7 +70,7 @@ meta:
 EOF
 cat token.yml
 
-./templates/make_manifest warden token.yml
+./templates/make_manifest warden redir.yml token.yml
 bosh -n deploy
 
 set -x
