@@ -1,0 +1,58 @@
+# Sample deployment bosh 2.0 style manifest for
+# depoying an HA vault
+name: vault-deployment
+ 
+director_uuid: <uuid> 
+ 
+releases:
+- name: consul
+  version: 22.0.0
+- name: vault
+  version: 0.4.3
+ 
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+ 
+instance_groups:
+- name: vault
+  instances: 3
+  vm_type: medium
+  stemcell: trusty
+  azs: [z1]
+  networks: [{name: <network-name>}]
+  persistent_disk_type: small
+ 
+  jobs:
+  - name: consul
+    release: consul
+    provides:
+      consul_servers: { as: consul_leaders }
+    consumes:
+      consul_servers: { from: consul_leaders }
+ 
+  - name: vault
+    release: vault
+    properties:
+      vault:
+        backend:
+          use_consul: true
+        listener:
+          tcp:
+            tls:
+              certificate: |
+                -----BEGIN CERTIFICATE-----
+               <your cert>
+                -----END CERTIFICATE-----
+ 
+              key: |
+                -----BEGIN RSA PRIVATE KEY-----
+               <your key>
+                -----END RSA PRIVATE KEY-----
+update:
+  canaries: 1
+  canary_watch_time: 1000-60000
+  max_in_flight: 1
+  serial: true
+  update_watch_time: 1000-60000
