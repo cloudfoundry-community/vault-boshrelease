@@ -1,14 +1,16 @@
 # Sample deployment bosh 2.0 style manifest for
 # depoying an HA vault
-name: vault-deployment
- 
-director_uuid: <uuid> 
+name: vault
  
 releases:
 - name: consul
   version: 22.0.0
+  url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=22.0.0A
+  sha1: 1f8ed4e78213580933fe4ac39de0ff03cd609eb2
 - name: vault
   version: 0.4.3
+  url: https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease?v=0.4.3
+  sha1: d9bd5d109ea060e3475f17e6f4beb78b91e980a8
  
 stemcells:
 - alias: trusty
@@ -21,8 +23,8 @@ instance_groups:
   vm_type: medium
   stemcell: trusty
   azs: [z1]
-  networks: [{name: <network-name>}]
-  persistent_disk_type: small
+  networks: [{name: default}]
+  persistent_disk_type: default
  
   jobs:
   - name: consul
@@ -41,18 +43,23 @@ instance_groups:
         listener:
           tcp:
             tls:
-              certificate: |
-                -----BEGIN CERTIFICATE-----
-               <your cert>
-                -----END CERTIFICATE-----
- 
-              key: |
-                -----BEGIN RSA PRIVATE KEY-----
-               <your key>
-                -----END RSA PRIVATE KEY-----
+              certificate: "((vault-tls.certificate))"
+              key: "((vault-tls.private_key))"
 update:
   canaries: 1
   canary_watch_time: 1000-60000
   max_in_flight: 1
   serial: true
   update_watch_time: 1000-60000
+
+variables:
+- name: vault-ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: vaultCA
+- name: vault-tls
+  type: certificate
+  options:
+    ca: vault-ca
+    common_name: vault
