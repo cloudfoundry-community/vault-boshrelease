@@ -5,7 +5,7 @@ name: vault
 releases:
 - name: consul
   version: 22.0.0
-  url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=22.0.0A
+  url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=22.0.0
   sha1: 1f8ed4e78213580933fe4ac39de0ff03cd609eb2
 - name: vault
   version: 0.4.3
@@ -43,8 +43,8 @@ instance_groups:
         listener:
           tcp:
             tls:
-              certificate: "((vault-tls.certificate))"
-              key: "((vault-tls.private_key))"
+              certificate: ((vault-tls.certificate))
+              key: ((vault-tls.private_key))
 update:
   canaries: 1
   canary_watch_time: 1000-60000
