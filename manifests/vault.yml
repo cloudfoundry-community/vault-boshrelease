@@ -1,5 +1,8 @@
 # Sample deployment bosh 2.0 style manifest for
 # depoying an HA vault
+# Run deploy with --vars-store=vars.yml to auto-gen self-signed certs
+# Must have a network, disk, and vm type called default
+# in your cloud config, or modify the 
 name: vault
  
 releases:
@@ -19,12 +22,12 @@ stemcells:
  
 instance_groups:
 - name: vault
-  instances: 3
-  vm_type: medium
+  instances: ((instances)) 
+  vm_type: ((vm_type))
   stemcell: trusty
   azs: [z1]
-  networks: [{name: default}]
-  persistent_disk_type: default
+  networks: [{name: ((network))}]
+  persistent_disk_type: ((disk_type))
  
   jobs:
   - name: consul
