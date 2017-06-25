@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source /var/vcap/jobs/vault/helpers/ctl_setup.sh 'vault'
+
+if [[ "$(cat "${JOB_DIR}/data/unseal_keys" | wc -l)" -gt 2 ]]; then
+  cat "${JOB_DIR}/data/unseal_keys" | \
+    while read key
+    do
+      vault unseal ${key}
+    done
+fi

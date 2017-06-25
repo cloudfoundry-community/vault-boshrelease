@@ -5,7 +5,9 @@ packages:
 templates:
   bin/vault_ctl: bin/vault_ctl
   bin/monit_debugger: bin/monit_debugger
+  bin/post-start: bin/post-start
   data/properties.sh.erb: data/properties.sh
+  data/unseal_keys.erb:  data/unseal_keys
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/vault.conf.erb:  config/server.hcl
@@ -36,6 +38,11 @@ properties:
   vault.listener.cluster.port:
     description: Port for cluster address required for server-to-server connection
     default: 8201
+
+  vault.update.step_down_token:
+    description: "For a true zero-downtime update to an HA cluster 'vault step-down' must be run on each node to force failover before the update. The token the must have the capabilities ['update', 'sudo'] on the '/sys/step-down' path for this to work."
+  vault.update.unseal_keys:
+    description: "For a true zero-downtime update to an HA cluster each node must be individually unsealed once it has restarted. It is highly advised to generate new unseal keys via 'vault rekey' once the update has completed."
 
   #
   # Telemetry configuration
