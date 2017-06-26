@@ -48,7 +48,7 @@ bosh -n create release
 bosh -n upload release --rebase || echo "Continuing..."
 
 export VAULT_ADDR=http://10.58.111.44:8200
-header "Deploying to BOSH-lite with vault.backend.use_file..."
+header "Deploying to BOSH-lite with vault.storage.use_file..."
 cat > redir.yml <<EOF
 ---
 meta:

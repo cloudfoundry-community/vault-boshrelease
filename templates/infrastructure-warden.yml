@@ -24,7 +24,7 @@ jobs:
       vault:
         ha:
           redirect: (( grab meta.redirect ))
-        backend:
+        storage:
           use_file: true
 
   - name: broker

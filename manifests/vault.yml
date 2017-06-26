@@ -2,9 +2,9 @@
 # depoying an HA vault
 # Run deploy with --vars-store=vars.yml to auto-gen self-signed certs
 # Must have a network, disk, and vm type called default
-# in your cloud config, or modify the 
+# in your cloud config, or modify the
 name: vault
- 
+
 releases:
 - name: consul
   version: 22.0.0
@@ -14,21 +14,21 @@ releases:
   version: 0.4.3
   url: https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease?v=0.4.3
   sha1: d9bd5d109ea060e3475f17e6f4beb78b91e980a8
- 
+
 stemcells:
 - alias: trusty
   os: ubuntu-trusty
   version: latest
- 
+
 instance_groups:
 - name: vault
-  instances: ((instances)) 
+  instances: ((instances))
   vm_type: ((vm_type))
   stemcell: trusty
   azs: [z1]
   networks: [{name: ((network))}]
   persistent_disk_type: ((disk_type))
- 
+
   jobs:
   - name: consul
     release: consul
@@ -36,12 +36,12 @@ instance_groups:
       consul_servers: { as: consul_leaders }
     consumes:
       consul_servers: { from: consul_leaders }
- 
+
   - name: vault
     release: vault
     properties:
       vault:
-        backend:
+        storage:
           use_consul: true
         listener:
           tcp:

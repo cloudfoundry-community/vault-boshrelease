@@ -68,7 +68,7 @@ available, so you can get those important things back out again.
 Enter High Availability.
 
 The easiest way to do high availability is to run 3 or more nodes,
-and use the Consul backend.  To do that, you're going to need to
+and use the Consul storage.  To do that, you're going to need to
 load the Consul BOSH release from the Cloud Foundry Community:
 
     bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease
@@ -104,7 +104,7 @@ jobs:
       join_hosts: *ips
 
     vault:
-      backend:
+      storage:
         use_consul: true
 ```
 

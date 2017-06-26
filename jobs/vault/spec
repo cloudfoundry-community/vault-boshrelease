@@ -68,74 +68,74 @@ properties:
     default: false
 
   #
-  # Consul backend
+  # Consul storage
   #
-  vault.backend.use_consul:
+  vault.storage.use_consul:
     description: Use Cosul for data store
     default: false
-  vault.backend.consul.path:
+  vault.storage.consul.path:
     description: Path for Consul
     default: vault/
-  vault.backend.consul.address:
+  vault.storage.consul.address:
     description: Address for Consul
-  vault.backend.consul.scheme:
+  vault.storage.consul.scheme:
     description: Scheme for Consul
-  vault.backend.consul.datacenter:
+  vault.storage.consul.datacenter:
     description: Datacenter for Consul
-  vault.backend.consul.token:
+  vault.storage.consul.token:
     description: Access Token for Consul
-  vault.backend.consul.check_timeout:
+  vault.storage.consul.check_timeout:
     description: The check interval used to send health check information to consul.
     default: "5s"
-  vault.backend.consul.max_parallel:
+  vault.storage.consul.max_parallel:
     description: The maximum number of concurrent requests to Consul.
     default: 128
-  vault.backend.consul.tls.skip_verify:
+  vault.storage.consul.tls.skip_verify:
     description: Indicates whether host verification should be disabled.
     default: false
-  vault.backend.consul.tls.min_version:
+  vault.storage.consul.tls.min_version:
     description: Minimum TLS version to use
     default: "tls12"
-  vault.backend.consul.tls.ca_certificate:
+  vault.storage.consul.tls.ca_certificate:
     description: Contents of the PEM-encoded TLS CA certificate
-  vault.backend.consul.tls.certificate:
+  vault.storage.consul.tls.certificate:
     description: Contents of the PEM-encoded TLS server certificate
-  vault.backend.consul.tls.key:
+  vault.storage.consul.tls.key:
     description: Contents of the PEM-encoded TLS server private key
 
   #
-  # In-Memory backend
+  # In-Memory storage
   #
-  vault.backend.use_inmem:
-    description: Use In Memory backend
+  vault.storage.use_inmem:
+    description: Use In Memory storage
     default: false
 
   #
-  # File backend
+  # File storage
   #
-  vault.backend.use_file:
-    description: Use File backend
+  vault.storage.use_file:
+    description: Use File storage
     default: false
-  vault.backend.file.path:
-    description: Path for File backend
+  vault.storage.file.path:
+    description: Path for File storage
     default: /var/vcap/store/
 
   #
-  # Amazon S3 backend
+  # Amazon S3 storage
   #
-  vault.backend.use_s3:
-    description: Use S3 backend
+  vault.storage.use_s3:
+    description: Use S3 storage
     default: false
-  vault.backend.s3.bucket:
+  vault.storage.s3.bucket:
     description: S3 bucket name
-  vault.backend.s3.access_key:
+  vault.storage.s3.access_key:
     description: AWS access key
-  vault.backend.s3.secret_key:
+  vault.storage.s3.secret_key:
     description: AWS secret key
-  vault.backend.s3.region:
+  vault.storage.s3.region:
     description: AWS region
     default: us-east-1
-  vault.backend.s3.endpoint:
+  vault.storage.s3.endpoint:
     description: AWS S3 endpoint
-  vault.backend.s3.session_token:
+  vault.storage.s3.session_token:
     description: AWS session token

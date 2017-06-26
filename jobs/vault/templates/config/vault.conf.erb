@@ -14,8 +14,8 @@
     end
   end
   consul_tls = false
-  if_p("vault.backend.consul.tls.certificate", "") do |consul_cert|
-    if_p("vault.backend.consul.tls.key", "") do |consul_key|
+  if_p("vault.storage.consul.tls.certificate", "") do |consul_cert|
+    if_p("vault.storage.consul.tls.key", "") do |consul_key|
       if consul_cert != "" and consul_key != ""
         consul_tls = true
       end
@@ -42,20 +42,20 @@ telemetry {
 }
 <% end %>
 <% if p("vault.disable_mlock") == true %>disable_mlock = true<% end %>
-<% if p("vault.backend.use_consul", "false") == true %>
-backend "consul"{
-  path = "<%= p("vault.backend.consul.path") %>"
-  <% if p("vault.backend.consul.address", "").empty? == false %>address = "<%= p("vault.backend.consul.address") %>"<% end %>
-  <% if p("vault.backend.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.backend.consul.scheme") %>"<% end %>
-  <% if p("vault.backend.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.backend.consul.datacenter") %>"<% end %>
-  <% if p("vault.backend.consul.token", "").empty? == false %>token = "<%= p("vault.backend.consul.token") %>"<% end %>
-  <% if p("vault.backend.consul.check_timeout", "").empty? == false %>check_timeout = "<%= p("vault.backend.consul.check_timeout") %>"<% end %>
-  max_parallel = "<%= p("vault.backend.consul.max_parallel") %>"
+<% if p("vault.storage.use_consul", "false") == true %>
+storage "consul"{
+  path = "<%= p("vault.storage.consul.path") %>"
+  <% if p("vault.storage.consul.address", "").empty? == false %>address = "<%= p("vault.storage.consul.address") %>"<% end %>
+  <% if p("vault.storage.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.storage.consul.scheme") %>"<% end %>
+  <% if p("vault.storage.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.storage.consul.datacenter") %>"<% end %>
+  <% if p("vault.storage.consul.token", "").empty? == false %>token = "<%= p("vault.storage.consul.token") %>"<% end %>
+  <% if p("vault.storage.consul.check_timeout", "").empty? == false %>check_timeout = "<%= p("vault.storage.consul.check_timeout") %>"<% end %>
+  max_parallel = "<%= p("vault.storage.consul.max_parallel") %>"
   <% if consul_tls %>
-    <% if p("vault.backend.consul.tls.skip_verify", "false") == true %>
+    <% if p("vault.storage.consul.tls.skip_verify", "false") == true %>
     tls_skip_verify = "true"
     <% end %>
-    <% if p("vault.backend.consul.tls.min_version", "").empty? == false %>tls_min_version = "<%= p("vault.backend.consul.tls.min_version") %>"<% end %>
+    <% if p("vault.storage.consul.tls.min_version", "").empty? == false %>tls_min_version = "<%= p("vault.storage.consul.tls.min_version") %>"<% end %>
     tls_ca_file = "/var/vcap/jobs/vault/ssl/ca_certificate.pem"
     tls_cert_file = "/var/vcap/jobs/vault/ssl/consul_certificate.pem"
     tls_key_file  = "/var/vcap/jobs/vault/ssl/consul_key.pem"
@@ -64,24 +64,24 @@ backend "consul"{
   <%= cluster_addr %>
   <%= disable_clustering %>
 }
-<% elsif p("vault.backend.use_file", "false") == true %>
-backend "file" {
-  path = "<%= p("vault.backend.file.path") %>"
+<% elsif p("vault.storage.use_file", "false") == true %>
+storage "file" {
+  path = "<%= p("vault.storage.file.path") %>"
 }
-<% elsif p("vault.backend.use_s3", "false") == true %>
-backend "s3" {
-  bucket = "<%= p('vault.backend.s3.bucket') %>"
-  access_key = "<%= p('vault.backend.s3.access_key') %>"
-  secret_key = "<%= p('vault.backend.s3.secret_key') %>"
-  region = "<%= p('vault.backend.s3.region') %>"
-  <% if p("vault.backend.s3.endpoint", "").empty? == false %>endpoint = "<%= p('vault.backend.s3.endpoint') %>"<% end %>
-  <% if p("vault.backend.s3.session_token", "").empty? == false %>session_token = "<%= p('vault.backend.s3.session_token') %>"<% end %>
+<% elsif p("vault.storage.use_s3", "false") == true %>
+storage "s3" {
+  bucket = "<%= p('vault.storage.s3.bucket') %>"
+  access_key = "<%= p('vault.storage.s3.access_key') %>"
+  secret_key = "<%= p('vault.storage.s3.secret_key') %>"
+  region = "<%= p('vault.storage.s3.region') %>"
+  <% if p("vault.storage.s3.endpoint", "").empty? == false %>endpoint = "<%= p('vault.storage.s3.endpoint') %>"<% end %>
+  <% if p("vault.storage.s3.session_token", "").empty? == false %>session_token = "<%= p('vault.storage.s3.session_token') %>"<% end %>
   <%= redirect_addr %>
   <%= cluster_addr %>
   <%= disable_clustering %>
 }
 <% else %>
-backend "inmem" {
+storage "inmem" {
 }
 <% end %>
 listener "tcp" {

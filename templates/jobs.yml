@@ -9,7 +9,7 @@ jobs:
     persistent_disk: (( param "How big should the vault disk be?" ))
     properties:
       vault:
-        backend: (( param "Specify a backend for the vault to be stored in" ))
+        storage: (( param "Specify a backend for the vault to be stored in" ))
 
   - name: broker
     templates:
@@ -33,7 +33,7 @@ jobs:
               - credentials
               - secure
 
-          backend:
+          storage:
             address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
             token:   (( grab meta.token ))
 
@@ -53,6 +53,6 @@ jobs:
           username: vault
           password: vault
 
-          backend:
+          storage:
             address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
             token:   (( grab meta.token ))
