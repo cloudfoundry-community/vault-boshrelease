@@ -33,7 +33,7 @@ jobs:
               - credentials
               - secure
 
-          storage:
+          backend:
             address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
             token:   (( grab meta.token ))
 
