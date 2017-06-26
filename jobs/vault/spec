@@ -13,7 +13,7 @@ templates:
   config/vault.conf.erb:  config/server.hcl
   ssl/certificate.pem: ssl/certificate.pem
   ssl/key.pem: ssl/key.pem
-  ssl/consul_ca_certificate.pem: ssl/consul_ca_certificate.pem
+  ssl/ca_certificate.pem: ssl/ca_certificate.pem
   ssl/consul_certificate.pem: ssl/consul_certificate.pem
   ssl/consul_key.pem: ssl/consul_key.pem
 properties:
@@ -78,6 +78,10 @@ properties:
     default: vault/
   vault.storage.consul.address:
     description: Address for Consul
+  vault.storage.consul.scheme:
+    description: Scheme for Consul
+  vault.storage.consul.datacenter:
+    description: Datacenter for Consul
   vault.storage.consul.token:
     description: Access Token for Consul
   vault.storage.consul.check_timeout:

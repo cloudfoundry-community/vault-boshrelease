@@ -21,12 +21,6 @@
       end
     end
   end
-  if_link("consul_servers") do |consul|
-    consul.if_p("consul.ssl_ca", "consul.ssl_cert", "consul.ssl_key") do |ca, cert, key|
-      consul_tls = true
-    end
-  end
-
 
   port = p("vault.listener.tcp.port")
   redirect_addr = "redirect_addr = \"#{p("vault.ha.redirect_address",
@@ -52,18 +46,19 @@ telemetry {
 storage "consul"{
   path = "<%= p("vault.storage.consul.path") %>"
   <% if p("vault.storage.consul.address", "").empty? == false %>address = "<%= p("vault.storage.consul.address") %>"<% end %>
+  <% if p("vault.storage.consul.scheme", "").empty? == false %>scheme = "<%= p("vault.storage.consul.scheme") %>"<% end %>
+  <% if p("vault.storage.consul.datacenter", "").empty? == false %>datacenter = "<%= p("vault.storage.consul.datacenter") %>"<% end %>
   <% if p("vault.storage.consul.token", "").empty? == false %>token = "<%= p("vault.storage.consul.token") %>"<% end %>
   <% if p("vault.storage.consul.check_timeout", "").empty? == false %>check_timeout = "<%= p("vault.storage.consul.check_timeout") %>"<% end %>
   max_parallel = "<%= p("vault.storage.consul.max_parallel") %>"
   <% if consul_tls %>
-  scheme = "https"
-  <% if p("vault.storage.consul.tls.skip_verify", "false") == true %>
-  tls_skip_verify = "true"
-  <% end %>
-  <% if p("vault.storage.consul.tls.min_version", "").empty? == false %>tls_min_version = "<%= p("vault.storage.consul.tls.min_version") %>"<% end %>
-  tls_ca_file = "/var/vcap/jobs/vault/ssl/consul_ca_certificate.pem"
-  tls_cert_file = "/var/vcap/jobs/vault/ssl/consul_certificate.pem"
-  tls_key_file  = "/var/vcap/jobs/vault/ssl/consul_key.pem"
+    <% if p("vault.storage.consul.tls.skip_verify", "false") == true %>
+    tls_skip_verify = "true"
+    <% end %>
+    <% if p("vault.storage.consul.tls.min_version", "").empty? == false %>tls_min_version = "<%= p("vault.storage.consul.tls.min_version") %>"<% end %>
+    tls_ca_file = "/var/vcap/jobs/vault/ssl/ca_certificate.pem"
+    tls_cert_file = "/var/vcap/jobs/vault/ssl/consul_certificate.pem"
+    tls_key_file  = "/var/vcap/jobs/vault/ssl/consul_key.pem"
   <% end %>
   <%= redirect_addr %>
   <%= cluster_addr %>
