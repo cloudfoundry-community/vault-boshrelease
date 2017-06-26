@@ -30,11 +30,11 @@
 
   port = p("vault.listener.tcp.port")
   redirect_addr = "redirect_addr = \"#{p("vault.ha.redirect_address",
-                                         "#{schema}://#{spec.address}:#{port}")}\""
+                                         "#{schema}://#{spec.ip}:#{port}")}\""
 
   cluster_port = p("vault.listener.cluster.port")
   cluster_addr = "cluster_addr = \"#{p("vault.ha.cluster_address",
-                                       "#{schema}://#{spec.address}:#{cluster_port}\"")}"
+                                       "#{schema}://#{spec.ip}:#{cluster_port}\"")}"
   disable_clustering = ""
   if p("vault.ha.disable_clustering", "false") == true
     disable_clustering = "disable_clustering = \"#{p("vault.ha.disable_clustering")}\""
