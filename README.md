@@ -136,6 +136,7 @@ Then add the token value to your deployment file under `properties.vault.update.
 Once the update of a node has completed it will need to be unsealed. If you add your unseal keys under `properties.vault.update.unseal_keys` this will also be taken care of. This will make the entire update process truely zero-downtime ie. when using a consul-agent to provide dns, the domain name `vault.service.consul` should always be pointing to a Vault that will accept connections.
 
 It is highly recommend to run `vault rekey` after an update where the unseal_keys were provided have taken place to not leave the keys exposed in the manifest.
+WARNING!!! If you add the unseal keys to your manifest and do not rekey once the deployment is done then it will be possible for anyone with access to the manifest to decrypt and see all secrets stored in vault.
 
 Cloud Foundry Service Broker
 ----------------------------
