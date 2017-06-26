@@ -53,6 +53,6 @@ jobs:
           username: vault
           password: vault
 
-          storage:
+          backend:
             address: (( concat "http://" jobs.vault.networks[0].static_ips[0] ":8200" ))
             token:   (( grab meta.token ))
