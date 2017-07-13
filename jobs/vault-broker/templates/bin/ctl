@@ -24,7 +24,7 @@ case $1 in
     export SERVICE_TAGS="<%= p('vault.broker.service.tags', []).join(', ') %>"
 
     export VAULT_ADDR="<%= p('vault.broker.backend.address') %>"
-    export VAULT_ADVERTISE="<%= p('vault.broker.backend.advertise') %>"
+    export VAULT_ADVERTISE_ADDR="<%= p('vault.broker.backend.advertise') %>"
     export VAULT_TOKEN="<%= p('vault.broker.backend.token') %>"
     export VAULT_SKIP_VERIFY="<%= p('vault.broker.backend.skip_verify', false) ? 'yes' : '' %>"
 
