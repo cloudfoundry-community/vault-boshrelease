@@ -1,0 +1,6 @@
+---
+- type: replace
+  path: /releases/name=vault
+  value:
+    name: vault
+    version: latest
