@@ -46,7 +46,7 @@ vault/9f34f839-92a0-4827-a713-c43a2430c0d9  running        z1  10.244.0.185
 Next you need to initialize the Vault. Connect via port `:8200`:
 
 ```
-export VAULT_ADDR=http://10.244.0.187:8200
+export VAULT_ADDR=https://10.244.0.187:8200
 export VAULT_SKIP_VERIFY=true
 vault init
 ```
