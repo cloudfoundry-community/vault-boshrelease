@@ -12,34 +12,42 @@ today!
 * Pull requests will be automatically tested against a bosh-lite (see `testflight-pr` job)
 * Discussions and CI notifications at [#vault channel](https://cloudfoundry.slack.com/messages/C22176QDP/) on https://slack.cloudfoundry.org
 
-Getting Started on BOSH-lite
-----------------------------
+One of the fastest ways to get [vault](https://about.vault.com/) running on any infrastructure is to deploy this bosh release.
+
+* [Concourse CI](https://ci.starkandwayne.com/teams/main/pipelines/vault-boshrelease)
+* Discussions and CI notifications at [#vault channel](https://cloudfoundry.slack.com/messages/C22176QDP/) on https://slack.cloudfoundry.org
+
+## Usage
 
 To use this bosh release, first upload it to your bosh:
 
 ```
 export BOSH_ENVIRONMENT=<alias>
-export BOSH_DEPLOYMENT=gogs
+export BOSH_DEPLOYMENT=vault
 
-git clone https://github.com/cloudfoundry-community/gogs-boshrelease.git
-cd gogs-boshrelease
-bosh deploy manifests/gogs.yml
+git clone https://github.com/cloudfoundry-community/vault-boshrelease.git
+cd vault-boshrelease
+bosh deploy manifests/vault.yml --vars-store tmp/creds.yml
 ```
 
-To discover the allocated IP addresses:
+If your BOSH has Credhub/Config Server, then you do not need `--vars-store`. Rather certificates/credentials will be generated and stored within Credhub. Subsequent instructions below will continue to use `--vars-store` examples.
+
+Run `bosh instances` to get the IP address for one of your Vault instances:
 
 ```
-bosh instances
+$ bosh instances
+
+Instance                                    Process State  AZ  IPs
+vault/259fbc67-0a0f-4714-a122-f3370ffd5bd6  running        z3  10.244.0.187
+vault/5a692a5e-260a-414f-9906-6e1ccbf66433  running        z2  10.244.0.186
+vault/9f34f839-92a0-4827-a713-c43a2430c0d9  running        z1  10.244.0.185
 ```
 
-In the examples below, it assumes one of the Vault instances has the IP address `10.244.8.3`.
-
-Vault should be up and running but it still needs some manual setup, due to security precautions.
-
-First, you need to initialize the vault:
+Next you need to initialize the Vault. Connect via port `:8200`:
 
 ```
-export VAULT_ADDR=http://10.244.8.3:8200
+export VAULT_ADDR=http://10.244.0.187:8200
+export VAULT_SKIP_VERIFY=true
 vault init
 ```
 
@@ -60,7 +68,7 @@ your _initial root token_:
 vault auth
 ```
 
-Now, you can put secrets in the vault, and read them back out:
+Now, you can put secrets in the vault, and read them back out (try any path with `secret/` prefix):
 
 ```
 vault write secret/handshake knock=knock
@@ -84,7 +92,7 @@ Enter High Availability.
 The easiest way to do high availability is to run 3 or more nodes,
 and use the Consul storage.
 
-Fortunately, the base manifest `manifests/vault.yml` does this by default.
+Fortunately, the `manifests/vault.yml` manifest in the [Usage](#usage) section above is already a 3-node high availability cluster.
 
 Zero Downtime Updates
 ---------------------
@@ -102,9 +110,9 @@ Policy 'step-down' written.
 $ vault token-create -policy="step-down" -display-name="step-down" -no-default-policy -orphan
 Key             Value
 ---             -----
-token           0687a4b0-4305-40da-b668-988abd7d056a
-token_accessor  b0da7605-0963-5328-7a8d-cff258c805f3
-token_duration  768h0m0s
+token          	STEP-DOWN-TOKEN
+token_accessor 	cf37c98a-685a-1cf0-fc2e-4bd21a4a6be2
+token_duration 	768h0m0s
 token_renewable true
 token_policies  [step-down]
 ```
@@ -113,8 +121,27 @@ Then add the token value to your deployment file under `properties.vault.update.
 
 Once the update of a node has completed it will need to be unsealed. If you add your unseal keys under `properties.vault.update.unseal_keys` this will also be taken care of. This will make the entire update process truely zero-downtime ie. when using a consul-agent to provide dns, the domain name `vault.service.consul` should always be pointing to a Vault that will accept connections.
 
+```
+bosh deploy manifests/vault.yml --vars-store tmp/creds.yml \
+  -o manifests/operators/step-down-token.yml \
+  -v "vault-step-down-token=STEP-DOWN-TOKEN" \
+  -v "vault-unseal-keys=[UNSEAL1,UNSEAL2,UNSEAL3]"
+```
+
+
 It is highly recommend to run `vault rekey` after an update where the unseal_keys were provided have taken place to not leave the keys exposed in the manifest.
-WARNING!!! If you add the unseal keys to your manifest and do not rekey once the deployment is done then it will be possible for anyone with access to the manifest to decrypt and see all secrets stored in vault.
+
+**WARNING!!!** If you add the unseal keys to your manifest and do not rekey once the deployment is done then it will be possible for anyone with access to the manifest to decrypt and see all secrets stored in vault.
+
+You will provide three of the original unseal keys to `vault rekey`, so run it three times to generate new unseal keys:
+
+```
+vault rekey
+vault rekey
+vault rekey
+```
+
+See https://www.vaultproject.io/guides/rekeying-and-rotating.html for additional instructions
 
 [BOSH]:      https://bosh.io
 [vault]:     https://vaultproject.io

@@ -1,0 +1,8 @@
+---
+- type: replace
+  path: /instance_groups/name=vault/jobs/name=vault/properties/vault/update?/step_down_token
+  value: ((vault-step-down-token))
+
+- type: replace
+  path: /instance_groups/name=vault/jobs/name=vault/properties/vault/update?/unseal_keys
+  value: ((vault-unseal-keys))
