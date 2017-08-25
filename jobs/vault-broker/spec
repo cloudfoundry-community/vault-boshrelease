@@ -2,6 +2,7 @@
 name: vault-broker
 packages:
   - vault-broker
+  - jq
 templates:
   bin/ctl: bin/ctl
   bin/monit_debugger: bin/monit_debugger
@@ -9,15 +10,27 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
+provides:
+- name: servicebroker
+  type: servicebroker
+  properties:
+    - port
+    - username
+    - password
+
 properties:
   vault.broker.guid:
     description: A unique GUID to use for this service broker inside of Cloud Foundry.
     default: ''
 
-  vault.broker.username:
+  port:
+    description: Binding port for broker API
+    default: 5000
+
+  username:
     description: The username for authenticating interaction with Cloud Foundry.
     default: vault
-  vault.broker.password:
+  password:
     description: The password for authenticating interaction with Cloud Foundry.
     default: vault
 

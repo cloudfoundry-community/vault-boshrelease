@@ -6,9 +6,6 @@ set -u # report the usage of uninitialized variables
 # Setup env vars and folders for the webapp_ctl script
 source /var/vcap/jobs/vault-broker/helpers/ctl_setup.sh 'vault-broker'
 
-export PORT=${PORT:-5000}
-export LANG=en_US.UTF-8
-
 case $1 in
 
   start)
@@ -16,14 +13,22 @@ case $1 in
 
     export BROKER_GUID="<%= p('vault.broker.guid') %>"
 
-    export AUTH_USERNAME="<%= p('vault.broker.username') %>"
-    export AUTH_PASSWORD="<%= p('vault.broker.password') %>"
+    export AUTH_USERNAME="<%= p('username') %>"
+    export AUTH_PASSWORD="<%= p('password') %>"
 
     export SERVICE_NAME="<%= p('vault.broker.service.name') %>"
     export SERVICE_DESC="<%= p('vault.broker.service.description') %>"
     export SERVICE_TAGS="<%= p('vault.broker.service.tags', []).join(', ') %>"
 
-    export VAULT_ADDR="<%= p('vault.broker.backend.address') %>"
+    export PORT=<%= p("port") %>
+
+    <% if_p('vault.broker.backend.address') do |address| %>
+    export VAULT_ADDR="<%= address %>"
+    <% end.else do %>
+      VAULT_IP=$(curl localhost:8500/v1/catalog/service/vault\?tag=active | jq -r ".[0].Address")
+      VAULT_PORT=$(curl localhost:8500/v1/catalog/service/vault\?tag=active | jq -r ".[0].ServicePort")
+      export VAULT_ADDR="https://${VAULT_IP}:${VAULT_PORT}"
+    <% end %>
     export VAULT_ADVERTISE_ADDR="<%= p('vault.broker.backend.advertise') %>"
     export VAULT_TOKEN="<%= p('vault.broker.backend.token') %>"
     export VAULT_SKIP_VERIFY="<%= p('vault.broker.backend.skip_verify', false) ? 'yes' : '' %>"

@@ -143,6 +143,37 @@ vault rekey
 
 See https://www.vaultproject.io/guides/rekeying-and-rotating.html for additional instructions
 
+Cloud Foundry Service Broker
+----------------------------
+
+Cloud Foundry developers/users can also access the multi-tenant Vault deployment via the Cloud Foundry service broker [`vault-broker`](https://github.com/cloudfoundry-community/vault-broker).
+
+Once you have deployed vault once, initialized it, and obtained the token, you can now re-deploy Vault with the token to enable the service broker:
+
+```
+cf_deployment=<name of cf deployment in BOSH, e.g. 'cf'>
+system_domain=$(bosh -d $cf_deployment manifest | bosh int - --path /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/system_domain)
+skip_verify=$(bosh -d $cf_deployment manifest | bosh int - --path /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ssl/skip_cert_verify)
+admin_password=$(bosh -d $cf_deployment manifest | bosh int - --path /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/scim/users/name=admin/password)
+
+bosh deploy manifests/vault.yml --vars-store tmp/creds.yml \
+  -o manifests/operators/servicebroker.yml \
+  -v "cf-system-domain=$system_domain" \
+  -v cf-api-url=https://api.$system_domain \
+  -v cf-skip-ssl-validation=$skip_verify \
+  -v cf-admin-username=admin \
+  -v "cf-admin-password=$admin_password" \
+  -v "vault-token=<token from vault init>"
+```
+
+NOTE: if you are using Credhub then consider inserting `vault-token` and `cf-admin-password` as a secret into Credhub rather than pass it as `-v` argument above.
+
+To register the service broker with Cloud Foundry:
+
+```
+bosh run-errand broker-registrar
+```
+
 [BOSH]:      https://bosh.io
 [vault]:     https://vaultproject.io
 [hashicorp]: https://hashicorp.com
