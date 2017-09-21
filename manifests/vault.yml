@@ -63,6 +63,6 @@ releases:
   url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=22.0.0
   sha1: 1f8ed4e78213580933fe4ac39de0ff03cd609eb2
 - name: vault
-  version: 0.6.1
-  url: https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease?v=0.6.1
-  sha1: 9f1bc371b5c1b7faadca97b892d6cc6d3c6baea6
+  version: 0.7.0
+  url: https://github.com/cloudfoundry-community/vault-boshrelease/releases/download/v0.7.0/vault-0.7.0.tgz
+  sha1: 6a59d2d30a5eb68e3f26e612751a760f895bf1b7
