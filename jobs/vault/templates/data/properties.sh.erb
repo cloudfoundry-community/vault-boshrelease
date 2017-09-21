@@ -8,9 +8,23 @@ export NAME='<%= name %>'
 export JOB_INDEX=<%= index %>
 # full job name, like redis/0 or webapp/3
 export JOB_FULL="$NAME/$JOB_INDEX"
-export VAULT_ADDR='http://127.0.0.1:8200'
+
+<%
+port = p("vault.listener.tcp.port")
+tls = false
+schema = "http"
+if_p("vault.listener.tcp.tls.certificate", "") do |cert|
+  if_p("vault.listener.tcp.tls.key", "") do |key|
+    if cert != "" and key != ""
+      tls = true
+      schema = "https"
+    end
+  end
+end
+vault_addr="#{schema}://#{spec.ip}:#{port}"
+%>
+export VAULT_ADDR="<%= vault_addr %>"
 export VAULT_TOKEN="<%= p("vault.update.step_down_token","") %>"
-<% if_p("vault.listener.tcp.tls.certificate", "vault.listener.tcp.tls.key") do || %>
+<% if tls %>
 export VAULT_SKIP_VERIFY=1
-export VAULT_ADDR='https://127.0.0.1:8200'
 <% end %>
