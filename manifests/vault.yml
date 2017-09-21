@@ -1,33 +1,18 @@
 # Sample deployment bosh 2.0 style manifest for
 # depoying an HA vault
 # Run deploy with --vars-store=vars.yml to auto-gen self-signed certs
-# Must have a network, disk, and vm type called default
+# Must have a network and vm type called default
 # in your cloud config, or modify the
 name: vault
 
-releases:
-- name: consul
-  version: 22.0.0
-  url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=22.0.0
-  sha1: 1f8ed4e78213580933fe4ac39de0ff03cd609eb2
-- name: vault
-  version: 0.6.1
-  url: https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease?v=0.6.1
-  sha1: 9f1bc371b5c1b7faadca97b892d6cc6d3c6baea6
-
-stemcells:
-- alias: trusty
-  os: ubuntu-trusty
-  version: latest
-
 instance_groups:
 - name: vault
-  instances: ((instances))
-  vm_type: ((vm_type))
+  instances: 3
+  vm_type: default
   stemcell: trusty
   azs: [z1]
-  networks: [{name: ((network))}]
-  persistent_disk_type: ((disk_type))
+  networks: [{name: default}]
+  persistent_disk: 10240
 
   jobs:
   - name: consul
@@ -66,3 +51,18 @@ variables:
   options:
     ca: vault-ca
     common_name: vault
+
+stemcells:
+- alias: trusty
+  os: ubuntu-trusty
+  version: latest
+
+releases:
+- name: consul
+  version: 22.0.0
+  url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=22.0.0
+  sha1: 1f8ed4e78213580933fe4ac39de0ff03cd609eb2
+- name: vault
+  version: 0.6.1
+  url: https://bosh.io/d/github.com/cloudfoundry-community/vault-boshrelease?v=0.6.1
+  sha1: 9f1bc371b5c1b7faadca97b892d6cc6d3c6baea6
