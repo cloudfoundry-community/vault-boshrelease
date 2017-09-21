@@ -55,44 +55,44 @@ jobs:
   - aggregate:
     - { get: git }
     - { get: vault, trigger: true, params: { regexp: "linux_amd64" }}
-  # - task: update-vault
-  #   config:
-  #     image_resource:
-  #       type: docker-image
-  #       source:
-  #         repository: (( grab meta.image.name ))
-  #         tag:        (( grab meta.image.tag ))
-  #     platform: linux
-  #     inputs:
-  #     - name: git
-  #     - name: vault
-  #     outputs:
-  #     - name: pushme
-  #     run:
-  #       path: ./git/ci/scripts/update-blob
-  #     params:
-  #       REPO_ROOT:   git
-  #       REPO_OUT:    pushme
-  #       BLOB_DIR:    vault
-  #       BLOB_NAME:   vault
-  #       BLOB_BINARY: vault_*_linux_amd64.zip
-  #       BLOB_URL:    https://github.com/hashicorp/vault
-  #       BLOB_CLEANUP:     vault/vault/vault_*_linux_amd64.zip
-  #       BLOB_DESTINATION: vault/vault_${VERSION}_linux_amd64.zip
-  #       AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
-  #       AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
-  #       BRANCH:         (( grab meta.github.branch ))
-  #   on_failure:
-  #     put: notify
-  #     params:
-  #       channel:  (( grab meta.slack.channel ))
-  #       username: (( grab meta.slack.username ))
-  #       icon_url: (( grab meta.slack.icon ))
-  #       text:     (( grab meta.slack.blob_failure ))
-  # - put: git
-  #   params:
-  #     rebase: true
-  #     repository: pushme/git
+  - task: update-vault
+    config:
+      image_resource:
+        type: docker-image
+        source:
+          repository: (( grab meta.image.name ))
+          tag:        (( grab meta.image.tag ))
+      platform: linux
+      inputs:
+      - name: git
+      - name: vault
+      outputs:
+      - name: pushme
+      run:
+        path: ./git/ci/scripts/update-blob
+      params:
+        REPO_ROOT:   git
+        REPO_OUT:    pushme
+        BLOB_DIR:    vault
+        BLOB_NAME:   vault
+        BLOB_BINARY: vault_*_linux_amd64.zip
+        BLOB_URL:    https://github.com/hashicorp/vault
+        BLOB_CLEANUP:     vault/vault_.*_linux_amd64.zip
+        BLOB_DESTINATION: vault/vault_${VERSION}_linux_amd64.zip
+        AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
+        AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
+        BRANCH:         (( grab meta.github.branch ))
+    on_failure:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_failure ))
+  - put: git
+    params:
+      rebase: true
+      repository: pushme/git
     on_success:
       put: notify
       params:
