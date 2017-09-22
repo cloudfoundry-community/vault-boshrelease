@@ -1,0 +1,37 @@
+name: vault
+version: 0.8.0
+commit_hash: 642adf7
+uncommitted_changes: false
+jobs:
+- name: sanity-test
+  version: 3a9dfb22c9f575fdbfe2c60ec7215d9bf9966e8a
+  fingerprint: 3a9dfb22c9f575fdbfe2c60ec7215d9bf9966e8a
+  sha1: 585183b64d469fa96b389a98ba9a7eebed21e042
+- name: vault
+  version: 49364a2c0eaa57688679e4712311a29a5d3cf3a6
+  fingerprint: 49364a2c0eaa57688679e4712311a29a5d3cf3a6
+  sha1: 8b3a89cd45f5a1fbf81e7b4946685990e06957d8
+- name: vault-broker
+  version: 1dfe6b92afaad8995422b3933ff5da6d6a3d6af4
+  fingerprint: 1dfe6b92afaad8995422b3933ff5da6d6a3d6af4
+  sha1: 59d06b514f6def31b4fdb4ecb652e3739c49f476
+packages:
+- name: jq
+  version: f502bfc65e67f129d21866f86e68f8458bd0ae28
+  fingerprint: f502bfc65e67f129d21866f86e68f8458bd0ae28
+  sha1: d47cedc0602f1f3c33b49c91c02c7953746c557b
+  dependencies: []
+- name: vault
+  version: d55a8dfc33bdfc2d470fdf705fd042194185d9b1
+  fingerprint: d55a8dfc33bdfc2d470fdf705fd042194185d9b1
+  sha1: 720ab8e7f94da048373b926da0bb989cc1c797da
+  dependencies: []
+- name: vault-broker
+  version: 9384cf9edc823d1b8e19fcbf7b38b8bfd03e3425
+  fingerprint: 9384cf9edc823d1b8e19fcbf7b38b8bfd03e3425
+  sha1: ef2ee3b64a455f245a7c273de136db8bb63d9476
+  dependencies: []
+license:
+  version: 643fdf9d42370280da7ea22848661d84979395a7
+  fingerprint: 643fdf9d42370280da7ea22848661d84979395a7
+  sha1: 5efb1e1006afdc2e2c40d3283903ac361a36e701
