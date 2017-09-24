@@ -1,0 +1,87 @@
+---
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: broker
+    azs: [z1,z2,z3]
+    instances: 1
+    vm_type: default
+    stemcell: default
+    networks: [{name: default}]
+
+    jobs:
+    - name: consul
+      release: consul
+      consumes:
+        consul_servers: { from: consul_leaders }
+      properties:
+        consul: {server: false}
+    - name: vault-broker
+      release: vault
+      properties:
+        username: vault
+        password: ((vault-broker-password))
+        vault:
+          broker:
+            guid: ((vault-broker-guid))
+
+            service:
+              name:        vault
+              description: Your Very Own Vault of Secrets
+              tags: [vault, credentials, secure, key-value]
+
+            backend:
+              token: ((vault-token))
+              skip_verify: true
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: broker-registrar
+    instances: 1
+    azs: [z1]
+    lifecycle: errand
+    vm_type: default
+    stemcell: default
+    networks: [{name: default}]
+    jobs:
+    - name: broker-registrar
+      release: broker-registrar
+      properties:
+        servicebroker:
+          name: vault
+        cf:
+          api_url: ((cf-api-url))
+          username: ((cf-admin-username))
+          password: ((cf-admin-password))
+          skip_ssl_validation: ((cf-skip-ssl-validation))
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: broker-deregistrar
+    instances: 1
+    azs: [z1]
+    lifecycle: errand
+    vm_type: default
+    stemcell: default
+    networks: [{name: default}]
+    jobs:
+    - name: broker-deregistrar
+      release: broker-registrar
+      properties:
+        servicebroker:
+          name: vault
+        cf:
+          api_url: ((cf-api-url))
+          username: ((cf-admin-username))
+          password: ((cf-admin-password))
+          skip_ssl_validation: ((cf-skip-ssl-validation))
+
+- type: replace
+  path: /releases/-
+  value:
+    name: broker-registrar
+    version: 3.3.1
+    url: https://github.com/cloudfoundry-community/broker-registrar-boshrelease/releases/download/v3.3.1/broker-registrar-3.3.1.tgz
+    sha1: c95283460a4f962cee1cacabb7333774783a24e9

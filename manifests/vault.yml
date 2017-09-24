@@ -51,6 +51,12 @@ variables:
   options:
     ca: vault-ca
     common_name: vault
+    extended_key_usage:
+    - client_auth
+    - server_auth
+    alternative_names:
+    - 127.0.0.1
+    - "*.vault.default.vault.bosh"
 
 stemcells:
 - alias: trusty
