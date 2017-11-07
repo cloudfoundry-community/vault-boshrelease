@@ -23,12 +23,23 @@
   end
 
   port = p("vault.listener.tcp.port")
-  redirect_addr = "redirect_addr = \"#{p("vault.ha.redirect_address",
-                                         "#{schema}://#{spec.ip}:#{port}")}\""
+
+  # Check configuration for redirect_address property and replace (index) if present, this allows for simplified HA
+  # deployments where each node needs a unique address.
+  redirect_address = p("vault.ha.redirect_address", "").gsub('(index)', spec.index.to_s)
+
+  # if redirect_address is set use that, otherwise use the ip and port
+  redirect_addr = "redirect_addr = \"#{redirect_address.blank? ? "#{schema}://#{spec.ip}:#{port}" : redirect_address }\""
 
   cluster_port = p("vault.listener.cluster.port")
-  cluster_addr = "cluster_addr = \"#{p("vault.ha.cluster_address",
-                                       "#{schema}://#{spec.ip}:#{cluster_port}")}\""
+
+  # Check configuration for cluster_address property and replace (index) if present, this allows for simplified HA
+  # deployments where each node needs a unique address.
+  cluster_address = p("vault.ha.cluster_address", "").gsub('(index)', spec.index.to_s)
+
+  # if cluster_address is set use that, otherwise use the ip and cluster_port
+  cluster_addr = "cluster_addr = \"#{cluster_address.blank? ? "#{schema}://#{spec.ip}:#{cluster_port}" : cluster_address}\""
+
   disable_clustering = ""
   if p("vault.ha.disable_clustering", "false") == true
     disable_clustering = "disable_clustering = \"#{p("vault.ha.disable_clustering")}\""
