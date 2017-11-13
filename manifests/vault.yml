@@ -21,7 +21,8 @@ instance_groups:
       consul_servers: { as: consul_leaders }
     consumes:
       consul_servers: { from: consul_leaders }
-
+    properties:
+      encrypt: ((consul-encrypt-key))
   - name: vault
     release: vault
     properties:
@@ -41,6 +42,8 @@ update:
   update_watch_time: 1000-60000
 
 variables:
+- name: consul-encrypt-key
+  type: password
 - name: vault-ca
   type: certificate
   options:
