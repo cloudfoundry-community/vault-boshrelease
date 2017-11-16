@@ -1,0 +1,4 @@
+---
+- type: replace
+  path: /instance_groups/name=vault/vm_type
+  value: ((vm_type))
