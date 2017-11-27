@@ -91,8 +91,14 @@ storage "s3" {
   <%= cluster_addr %>
   <%= disable_clustering %>
 }
-<% else %>
+<% elsif p("vault.storage.use_inmem", "false") == true %>
 storage "inmem" {
+}
+<% else %>
+storage "<%= p("vault.storage.custom.type") %>" {
+<% p("vault.storage.custom.options").to_a.each do | k, v | %>
+  <%= k %> = "<%= v %>"
+<% end %>
 }
 <% end %>
 listener "tcp" {

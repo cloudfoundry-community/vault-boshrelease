@@ -135,3 +135,15 @@ properties:
     description: AWS S3 endpoint
   vault.storage.s3.session_token:
     description: AWS session token
+
+  #
+  # Custom storage
+  #
+  vault.storage.custom.type:
+    description: Type of custom storage
+    example: zookeeper
+  vault.storage.custom.options:
+    description: Config options for storage type
+    example: |
+      address: localhost:2181
+      path: vault/
