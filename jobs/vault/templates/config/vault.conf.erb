@@ -105,6 +105,12 @@ storage "mysql" {
 <% elsif p("vault.storage.use_inmem", "false") == true %>
 storage "inmem" {
 }
+<% elsif p("vault.storage.use_google_cloud", "false") == true %>
+storage "gcs" {
+  bucket = "<%= p('vault.storage.google_cloud.bucket') %>"
+  credentials_file = "/var/vcap/jobs/vault/data/google-credentials.json"
+  <%= disable_clustering %>
+}
 <% else %>
 storage "<%= p("vault.storage.custom.type") %>" {
 <% p("vault.storage.custom.options").to_a.each do | k, v | %>
