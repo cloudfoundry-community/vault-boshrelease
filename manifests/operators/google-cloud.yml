@@ -1,0 +1,17 @@
+---
+- type: remove
+  path: /instance_groups/name=vault/jobs/name=consul
+- type: remove
+  path: /releases/name=consul
+- type: replace
+  path: /instance_groups/name=vault/jobs/name=vault/properties/vault/storage
+  value:
+    use_google_cloud: true
+- type: replace
+  path: /instance_groups/name=vault/jobs/name=vault/properties/vault/storage?/google_cloud?
+  value:
+     bucket: ((google_cloud_bucket))
+     credentials: ((google_cloud_credentials))
+- type: replace
+  path: /instance_groups/name=vault/instances
+  value: 1

@@ -8,6 +8,7 @@ templates:
   bin/post-start: bin/post-start
   data/properties.sh.erb: data/properties.sh
   data/unseal_keys.erb:  data/unseal_keys
+  data/google-credentials.json.erb: data/google-credentials.json
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/vault.conf.erb:  config/server.hcl
@@ -170,3 +171,14 @@ properties:
     example: |
       address: localhost:2181
       path: vault/
+
+  #
+  # Google Cloud storage
+  #
+  vault.storage.use_google_cloud:
+    description: Use Google Cloud storage
+    default: false
+  vault.storage.google_cloud.bucket:
+    description: Google Cloud bucket name
+  vault.storage.google_cloud.credentials:
+    description: Platform service account private key file in JSON format.
