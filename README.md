@@ -1,6 +1,13 @@
 Vault - Secure Credentials Storage
 ==================================
 
+**NOTE**: This BOSH release has a lot of configuration options,
+and is intended more for people who want to tinker with Vault and
+its various storage backends.  If you are looking for a
+**rock-solid** Vault deployment on BOSH, check out the [safe BOSH
+Release](https://github.com/cloudfoundry-community/safe-boshrelease)
+instead.
+
 Questions? Pop in our [slack channel](https://cloudfoundry.slack.com/messages/vault/)!
 
 This [BOSH][bosh] release packages the excellent [Vault][vault]

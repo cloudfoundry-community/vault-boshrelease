@@ -91,6 +91,17 @@ storage "s3" {
   <%= cluster_addr %>
   <%= disable_clustering %>
 }
+<% elsif p("vault.storage.use_mysql", "false") == true %>
+storage "mysql" {
+  address = "<%= p('vault.storage.mysql.address') %>"
+  database = "<%= p('vault.storage.mysql.database') %>"
+  table = "<%= p('vault.storage.mysql.table') %>"
+  username = "<%= p('vault.storage.mysql.username') %>"
+  password = "<%= p('vault.storage.mysql.password') %>"
+  max_parallel = "<%= p('vault.storage.mysql.max_parallel') %>"
+
+  <% if p("value.storage.mysql.tls.ca_certificate", "").empty? == false %>tls_ca_file = "/var/vcap/jobs/vault/ssl/mysql_ca_certificate.pem"<% end %>
+}
 <% elsif p("vault.storage.use_inmem", "false") == true %>
 storage "inmem" {
 }
