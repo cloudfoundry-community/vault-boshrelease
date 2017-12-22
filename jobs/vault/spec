@@ -158,3 +158,15 @@ properties:
   vault.storage.mysql.max_parallel:
     description: Specifies the maximum number of concurrent requests to MySQL.
     default: 128
+
+  #
+  # Custom storage
+  #
+  vault.storage.custom.type:
+    description: Type of custom storage
+    example: zookeeper
+  vault.storage.custom.options:
+    description: Config options for storage type
+    example: |
+      address: localhost:2181
+      path: vault/
