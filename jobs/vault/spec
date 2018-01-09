@@ -20,7 +20,7 @@ templates:
   ssl/mysql_ca_certificate.pem: ssl/mysql_ca_certificate.pem
 properties:
   vault.config:
-    description: Contents of the Vault config specified as a string literal
+    description: HCL string literal representing the full Vault configuration, will take precedence over any other configuration properties
   vault.listener.tcp.address:
     description: Address for TCP connection
     default: 0.0.0.0
