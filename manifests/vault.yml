@@ -26,8 +26,19 @@ instance_groups:
     release: vault
     properties:
       vault:
-        storage:
-          use_consul: true
+        config: |
+          storage "consul"{
+            path = "vault/"
+            check_timeout = "5s"
+            max_parallel = "128"
+          }
+
+          listener "tcp" {
+            address = "0.0.0.0:8200"
+            tls_cert_file = "/var/vcap/jobs/vault/ssl/certificate.pem"
+            tls_key_file  = "/var/vcap/jobs/vault/ssl/key.pem"
+            tls_min_version = "tls12"
+          }
         listener:
           tcp:
             tls:
