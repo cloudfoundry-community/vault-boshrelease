@@ -1,49 +1,55 @@
 <%
-  telemetry_enabled = false
-  if p("vault.telemetry.statsite_addr", "").empty? == false or p("vault.telemetry.statsd_addr", "").empty? == false
-    telemetry_enabled = true
-  end
-  tls = false
-  schema = "http"
-  if_p("vault.listener.tcp.tls.certificate", "") do |cert|
-    if_p("vault.listener.tcp.tls.key", "") do |key|
-      if cert != "" and key != ""
-        tls = true
-        schema = "https"
+  # If the Vault config was passed in use it as is and exit
+  if_p("vault.config") do |vault_config| %>
+    <%= vault_config %>
+<%
+  # If the Vault config was not passed in, pick out specified config pieces and default others.
+  end.else do
+    telemetry_enabled = false
+    if p("vault.telemetry.statsite_addr", "").empty? == false or p("vault.telemetry.statsd_addr", "").empty? == false
+      telemetry_enabled = true
+    end
+    tls = false
+    schema = "http"
+    if_p("vault.listener.tcp.tls.certificate", "") do |cert|
+      if_p("vault.listener.tcp.tls.key", "") do |key|
+        if cert != "" and key != ""
+          tls = true
+          schema = "https"
+        end
       end
     end
-  end
-  consul_tls = false
-  if_p("vault.storage.consul.tls.certificate", "") do |consul_cert|
-    if_p("vault.storage.consul.tls.key", "") do |consul_key|
-      if consul_cert != "" and consul_key != ""
-        consul_tls = true
+    consul_tls = false
+    if_p("vault.storage.consul.tls.certificate", "") do |consul_cert|
+      if_p("vault.storage.consul.tls.key", "") do |consul_key|
+        if consul_cert != "" and consul_key != ""
+          consul_tls = true
+        end
       end
     end
-  end
 
-  port = p("vault.listener.tcp.port")
+    port = p("vault.listener.tcp.port")
 
-  # Check configuration for redirect_address property and replace (index) if present, this allows for simplified HA
-  # deployments where each node needs a unique address.
-  redirect_address = p("vault.ha.redirect_address", "").gsub('(index)', spec.index.to_s)
+    # Check configuration for redirect_address property and replace (index) if present, this allows for simplified HA
+    # deployments where each node needs a unique address.
+    redirect_address = p("vault.ha.redirect_address", "").gsub('(index)', spec.index.to_s)
 
-  # if redirect_address is set use that, otherwise use the ip and port
-  redirect_addr = "redirect_addr = \"#{redirect_address.blank? ? "#{schema}://#{spec.ip}:#{port}" : redirect_address }\""
+    # if redirect_address is set use that, otherwise use the ip and port
+    redirect_addr = "redirect_addr = \"#{redirect_address.blank? ? "#{schema}://#{spec.ip}:#{port}" : redirect_address }\""
 
-  cluster_port = p("vault.listener.cluster.port")
+    cluster_port = p("vault.listener.cluster.port")
 
-  # Check configuration for cluster_address property and replace (index) if present, this allows for simplified HA
-  # deployments where each node needs a unique address.
-  cluster_address = p("vault.ha.cluster_address", "").gsub('(index)', spec.index.to_s)
+    # Check configuration for cluster_address property and replace (index) if present, this allows for simplified HA
+    # deployments where each node needs a unique address.
+    cluster_address = p("vault.ha.cluster_address", "").gsub('(index)', spec.index.to_s)
 
-  # if cluster_address is set use that, otherwise use the ip and cluster_port
-  cluster_addr = "cluster_addr = \"#{cluster_address.blank? ? "#{schema}://#{spec.ip}:#{cluster_port}" : cluster_address}\""
+    # if cluster_address is set use that, otherwise use the ip and cluster_port
+    cluster_addr = "cluster_addr = \"#{cluster_address.blank? ? "#{schema}://#{spec.ip}:#{cluster_port}" : cluster_address}\""
 
-  disable_clustering = ""
-  if p("vault.ha.disable_clustering", "false") == true
-    disable_clustering = "disable_clustering = \"#{p("vault.ha.disable_clustering")}\""
-  end
+    disable_clustering = ""
+    if p("vault.ha.disable_clustering", "false") == true
+      disable_clustering = "disable_clustering = \"#{p("vault.ha.disable_clustering")}\""
+    end
 %>
 <% if telemetry_enabled %>
 telemetry {
@@ -125,3 +131,4 @@ listener "tcp" {
  tls_key_file  = "/var/vcap/jobs/vault/ssl/key.pem"
  tls_min_version = "<%= p("vault.listener.tcp.tls.min_version") %>"
 }
+<% end %>
