@@ -29,9 +29,9 @@ properties:
     default: 8200
 
   vault.listener.tcp.tls.certificate:
-    description: Contents of the PEM-encoded TLS server certificate
+    description: Contents of the PEM-encoded TLS server certificate. If TLS is needed this must be passed, even when using vault.config.
   vault.listener.tcp.tls.key:
-    description: Contents of the PEM-encoded TLS server private key
+    description: Contents of the PEM-encoded TLS server private key. If TLS is needed this must be passed, even when using vault.config.
   vault.listener.tcp.tls.min_version:
     description: Minimum TLS version to use
     default: "tls12"
@@ -97,11 +97,11 @@ properties:
     description: Minimum TLS version to use
     default: "tls12"
   vault.storage.consul.tls.ca_certificate:
-    description: Contents of the PEM-encoded TLS CA certificate
+    description: Contents of the PEM-encoded TLS CA certificate. If TLS is needed with Consul this must be passed, even when using vault.config.
   vault.storage.consul.tls.certificate:
-    description: Contents of the PEM-encoded TLS server certificate
+    description: Contents of the PEM-encoded TLS server certificate. If TLS is needed with Consul this must be passed, even when using vault.config.
   vault.storage.consul.tls.key:
-    description: Contents of the PEM-encoded TLS server private key
+    description: Contents of the PEM-encoded TLS server private key. If TLS is needed with Consul this must be passed, even when using vault.config.
 
   #
   # In-Memory storage
@@ -157,7 +157,7 @@ properties:
   vault.storage.mysql.table:
     description: Specifies the name of the table. If the table does not exist, Vault will attempt to create it.
   vault.storage.mysql.tls.ca_certificate:
-    description: Specifies the CA certificate to connect using TLS.
+    description: Specifies the CA certificate to connect using TLS. If TLS is needed with MySQL this must be passed, even when using vault.config.
   vault.storage.mysql.max_parallel:
     description: Specifies the maximum number of concurrent requests to MySQL.
     default: 128

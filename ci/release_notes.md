@@ -4,6 +4,7 @@
 
 ## Updates
 
+* Add support for the `vault.config` property, which can be used to pass an HCL string literal representation of Vault's configuration. Passing this value will take precedence over any other defined configuration properties. TLS certs and keys will still need to be passed as properties so they can be rendered by their respective template files.
 * `manifests/vault.yml` has default `vm_type`, `persistent_disk_type` and `network` name that matches the `cloud-config` from `cf-deployment` project. See `manifests/operators/scale.yml` for an operator file to modify these values.
 * README has been updated to recommend the bosh2 manifests and operator files
 * `manifests/operators/servicebroker.yml` will add the `vault-broker` job in a new instance
