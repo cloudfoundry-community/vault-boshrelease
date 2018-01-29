@@ -1,6 +1,9 @@
 <%
   # If the Vault config was passed in use it as is and exit
-  if_p("vault.config") do |vault_config| %>
+  if_p("vault.config") do |vault_config|
+    vault_config.gsub!('(index)', spec.index.to_s)
+    vault_config.gsub!('(ip)', spec.ip)
+%>
     <%= vault_config %>
 <%
   # If the Vault config was not passed in, pick out specified config pieces and default others.
