@@ -15,35 +15,25 @@ instance_groups:
   persistent_disk: 10240
 
   jobs:
-  - name: consul
-    release: consul
-    provides:
-      consul_servers: { as: consul_leaders }
-    consumes:
-      consul_servers: { from: consul_leaders }
-
   - name: vault
     release: vault
     properties:
       vault:
         config: |
-          storage "consul"{
-            path = "vault/"
-            check_timeout = "5s"
-            max_parallel = "128"
+          storage "file" {
+            path = "/var/vcap/jobs/vault/data"
           }
 
           listener "tcp" {
             address = "0.0.0.0:8200"
-            tls_cert_file = "/var/vcap/jobs/vault/ssl/certificate.pem"
-            tls_key_file  = "/var/vcap/jobs/vault/ssl/key.pem"
+            tls_cert_file = "/var/vcap/jobs/vault/tls/vault/cert.pem"
+            tls_key_file  = "/var/vcap/jobs/vault/tls/vault/key.pem"
             tls_min_version = "tls12"
           }
-        listener:
-          tcp:
-            tls:
-              certificate: ((vault-tls.certificate))
-              key: ((vault-tls.private_key))
+      tls:
+        - name: vault
+          cert: ((vault-tls.certificate))
+          key: ((vault-tls.private_key))
 update:
   canaries: 1
   canary_watch_time: 1000-60000
@@ -75,10 +65,6 @@ stemcells:
   version: latest
 
 releases:
-- name: consul
-  version: 23.0.4
-  url: https://bosh.io/d/github.com/cloudfoundry-community/consul-boshrelease?v=23.0.4
-  sha1: 81b838bbe40eb6a826da6e78b2ac833fa6b74a16
 - name: vault
   version: 0.8.0
   url: https://github.com/cloudfoundry-community/vault-boshrelease/releases/download/v0.8.0/vault-0.8.0.tgz

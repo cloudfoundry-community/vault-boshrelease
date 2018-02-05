@@ -8,11 +8,19 @@ source /var/vcap/jobs/vault/helpers/ctl_setup.sh 'vault'
 
 export PORT=${PORT:-5000}
 export LANG=en_US.UTF-8
+export PATH=$PATH:/var/vcap/packges/ttar/bin
+
+inflate_certs() {
+	# reconstitute certs based on ttar file
+	mkdir -p ${JOB_DIR}/tls
+	ttar < ${JOB_DIR}/tls/certs.ttar
+}
 
 case $1 in
 
   start)
     pid_guard $PIDFILE $JOB_NAME
+    inflate_certs
 
     # store pid in $PIDFILE
     echo $$ > $PIDFILE

@@ -124,19 +124,6 @@ storage "consul"{
 }
 ```
 
-High Availability Concerns
---------------------------
-
-If you put important things in your Vault, you want it to be
-available, so you can get those important things back out again.
-
-Enter High Availability.
-
-The easiest way to do high availability is to run 3 or more nodes,
-and use the Consul storage.
-
-Fortunately, the `manifests/vault.yml` manifest in the [Usage](#usage) section above is already a 3-node high availability cluster.
-
 Zero Downtime Updates
 ---------------------
 
