@@ -87,6 +87,42 @@ utility for Vault that provides higher-level abstractions like
 tree-based listing, secret generation, secure terminal password
 entry, etc.
 
+### Configuration
+
+As the base manifest shows, a full HCL configuration can be assigned to the `vault.config` property. If you're using 
+Vault in HA mode (which is recommended) you'll probably need to set vaules like `redirect_address` and `cluster_address`.
+The `vault.config` property supports the following template strings to make setting these values easier: 
+
+**`(ip)`**
+
+During deployment this value will be replaced with the IP address of the instance. This will not include the protocol or
+any port information. For example for an IP based configuration:
+
+```hcl
+storage "consul"{
+  path = "vault/"
+  check_timeout = "5s"
+  max_parallel = "128"
+  cluster_address = "https://(ip):8200"
+  redirect_address = "https://(ip):8200"
+}
+```
+
+**`(index)`**
+
+During deployment this value will be replaced with the index of the instance. This can be particularly useful for DNS
+configuration values. For example, if you were deploying 3 instances, this would ensure each one had a unique DNS value
+in its configuration:
+
+```hcl
+storage "consul"{
+  path = "vault/"
+  check_timeout = "5s"
+  max_parallel = "128"
+  cluster_address = "https://prod-vault-(index).yoursite.biz"
+  redirect_address = "https://prod-vault-(index).yoursite.biz"
+}
+```
 
 High Availability Concerns
 --------------------------
