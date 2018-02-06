@@ -91,7 +91,7 @@ entry, etc.
 
 ### Template Strings
 As the base manifest shows, a full HCL configuration can be assigned to the `vault.config` property. If you're using 
-Vault in HA mode (which is recommended) you'll probably need to set vaules like `redirect_address` and `cluster_address`.
+Vault in HA mode (which is recommended) you'll probably need to set values like `redirect_address` and `cluster_address`.
 The `vault.config` property supports the following template strings to make setting these values easier: 
 
 **`(ip)`**
