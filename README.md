@@ -143,7 +143,7 @@ tls:
     key: ((other_tls_key_content))
 ```
 
-The above configuration will create the following files before starting Vault:
+The above configuration will create the following files on the Vault instance before starting Vault:
   - `/var/vcap/jobs/vault/tls/my_tls_cert/cert.pem`
   - `/var/vcap/jobs/vault/tls/my_tls_cert/key.pem`
   - `/var/vcap/jobs/vault/tls/other_tls_cert/cert.pem`
