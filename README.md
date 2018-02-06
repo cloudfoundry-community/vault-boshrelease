@@ -133,8 +133,11 @@ be used to provide these certificates:
 ```yaml
 tls:
   - name: "my_tls_cert"
-    cert: ((tls_certificate_content))
-    key: ((tls_key_content))
+    cert: | 
+      -----BEGIN CERTIFICATE-----
+      CertBlockAsRawText
+      -----END CERTIFICATE-----
+    key: ((or_use_a_variable))
   - name: "other_tls_cert"
     cert: ((other_tls_certificate_content))
     key: ((other_tls_key_content))
