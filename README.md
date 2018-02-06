@@ -87,8 +87,9 @@ utility for Vault that provides higher-level abstractions like
 tree-based listing, secret generation, secure terminal password
 entry, etc.
 
-### Configuration
+## Configuration
 
+### Template Strings
 As the base manifest shows, a full HCL configuration can be assigned to the `vault.config` property. If you're using 
 Vault in HA mode (which is recommended) you'll probably need to set vaules like `redirect_address` and `cluster_address`.
 The `vault.config` property supports the following template strings to make setting these values easier: 
@@ -123,6 +124,28 @@ storage "consul"{
   redirect_address = "https://prod-vault-(index).yoursite.biz"
 }
 ```
+
+### Certificate Management
+
+Your Vault configuration is likely going to require TLS certificates on the instance. This Bosh release's `tls` property can
+be used to provide these certificates:
+
+```yaml
+tls:
+  - name: "my_tls_cert"
+    cert: ((tls_certificate_content))
+    key: ((tls_key_content))
+  - name: "other_tls_cert"
+    cert: ((other_tls_certificate_content))
+    key: ((other_tls_key_content))
+```
+
+The above configuration will create the following files before starting Vault:
+  - `/var/vcap/jobs/vault/tls/my_tls_cert/cert.pem`
+  - `/var/vcap/jobs/vault/tls/my_tls_cert/key.pem`
+  - `/var/vcap/jobs/vault/tls/other_tls_cert/key.pem`
+  - `/var/vcap/jobs/vault/tls/other_tls_cert/key.pem`
+
 
 Zero Downtime Updates
 ---------------------
