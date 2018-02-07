@@ -13,11 +13,3 @@ task :job_properties do
     end
   end
 end
-
-desc "Update the ttar script used for cert management to the latest version available on GitHub"
-task :update_ttar do
-  require "open-uri"
-  File.open("src/ttar/ttar", "w") do |f|
-    IO.copy_stream(open("https://raw.githubusercontent.com/jhunt/ttar/master/ttar"), f)
-  end
-end
