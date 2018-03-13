@@ -8,3 +8,6 @@
 * README has been updated to recommend the bosh2 manifests and operator files
 * `manifests/operators/servicebroker.yml` will add the `vault-broker` job in a new instance
 * `vault-broker` will attempt to discover vault cluster via local consul (`localhost:8500`) if explicit backend address not provided; this feature is used in the
+
+# vault
+Bumped https://github.com/hashicorp/vault to v0.9.5
