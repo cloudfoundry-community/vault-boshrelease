@@ -6,7 +6,7 @@ vault-broker/vault-broker:
   size: 6813888
   object_id: f82da81b-85b3-4fdf-4405-1190424be308
   sha: 42c70b44f619befb7c4d5417490877cda4f1657b
-vault/vault_0.9.5_linux_amd64.zip:
-  size: 19548711
-  object_id: 714e9796-1926-49b4-5e45-ad285b9c9985
-  sha: 786a03d3361501959b57ccaa6e926d9318290bf8
+vault/vault_0.9.6_linux_amd64.zip:
+  size: 19726726
+  object_id: c0e52248-db33-4096-5593-53c0ccc70473
+  sha: 85b2093c0dd7b594b9f793fcb9d7ad73d8b04fdd
