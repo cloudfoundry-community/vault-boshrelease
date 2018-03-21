@@ -2,183 +2,27 @@
 name: vault
 packages:
 - vault
+- ttar
 templates:
   bin/vault_ctl: bin/vault_ctl
   bin/monit_debugger: bin/monit_debugger
   bin/post-start: bin/post-start
   data/properties.sh.erb: data/properties.sh
   data/unseal_keys.erb:  data/unseal_keys
-  data/google-credentials.json.erb: data/google-credentials.json
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/vault.conf.erb:  config/server.hcl
-  ssl/certificate.pem: ssl/certificate.pem
-  ssl/key.pem: ssl/key.pem
-  ssl/consul_ca_certificate.pem: ssl/consul_ca_certificate.pem
-  ssl/consul_certificate.pem: ssl/consul_certificate.pem
-  ssl/consul_key.pem: ssl/consul_key.pem
-  ssl/mysql_ca_certificate.pem: ssl/mysql_ca_certificate.pem
+  tls/certs.ttar: tls/certs.ttar
 properties:
-  vault.listener.tcp.address:
-    description: Address for TCP connection
-    default: 0.0.0.0
-  vault.listener.tcp.port:
-    description: Port for TCP connection
-    default: 8200
-
-  vault.listener.tcp.tls.certificate:
-    description: Contents of the PEM-encoded TLS server certificate
-  vault.listener.tcp.tls.key:
-    description: Contents of the PEM-encoded TLS server private key
-  vault.listener.tcp.tls.min_version:
-    description: Minimum TLS version to use
-    default: "tls12"
-
-  vault.listener.cluster.address:
-    description: Address to bind to for cluster server-to-server requests
-    default: 0.0.0.0
-  vault.listener.cluster.port:
-    description: Port for cluster address required for server-to-server connection
-    default: 8201
-
+  vault.config:
+    description: HCL string literal representing the full Vault configuration, will take precedence over any other configuration properties
   vault.update.step_down_token:
     description: "For a true zero-downtime update to an HA cluster 'vault step-down' must be run on each node to force failover before the update. The token the must have the capabilities ['update', 'sudo'] on the '/sys/step-down' path for this to work."
   vault.update.unseal_keys:
     description: "For a true zero-downtime update to an HA cluster each node must be individually unsealed once it has restarted. It is highly advised to generate new unseal keys via 'vault rekey' once the update has completed."
 
   #
-  # Telemetry configuration
+  # TLS
   #
-  vault.telemetry.statsite_addr:
-    description: Address for statsite
-  vault.telemetry.statsd_addr:
-    description: Address for StatsD
-  vault.telemetry.disable_hostname:
-    description: Whether or not to prepend runtime telemetry with the machines hostname. This is a global option.
-    default: false
-
-  vault.ha.redirect_address:
-    description: "This is the address to advertise to other Vault servers in the cluster for client redirection"
-  vault.ha.cluster_address:
-    description: "This is the address to advertise to other Vault servers in the cluster for request forwarding."
-  vault.ha.disable_clustering:
-    description: "This controls whether clustering features (currently, request forwarding) are enabled"
-    default: "true"
-
-  vault.disable_mlock:
-    description: Disable mlock if you're crazy
-    default: false
-
-  #
-  # Consul storage
-  #
-  vault.storage.use_consul:
-    description: Use Cosul for data store
-    default: false
-  vault.storage.consul.path:
-    description: Path for Consul
-    default: vault/
-  vault.storage.consul.address:
-    description: Address for Consul
-  vault.storage.consul.token:
-    description: Access Token for Consul
-  vault.storage.consul.check_timeout:
-    description: The check interval used to send health check information to consul.
-    default: "5s"
-  vault.storage.consul.max_parallel:
-    description: The maximum number of concurrent requests to Consul.
-    default: 128
-  vault.storage.consul.tls.skip_verify:
-    description: Indicates whether host verification should be disabled.
-    default: false
-  vault.storage.consul.tls.min_version:
-    description: Minimum TLS version to use
-    default: "tls12"
-  vault.storage.consul.tls.ca_certificate:
-    description: Contents of the PEM-encoded TLS CA certificate
-  vault.storage.consul.tls.certificate:
-    description: Contents of the PEM-encoded TLS server certificate
-  vault.storage.consul.tls.key:
-    description: Contents of the PEM-encoded TLS server private key
-
-  #
-  # In-Memory storage
-  #
-  vault.storage.use_inmem:
-    description: Use In Memory storage
-    default: false
-
-  #
-  # File storage
-  #
-  vault.storage.use_file:
-    description: Use File storage
-    default: false
-  vault.storage.file.path:
-    description: Path for File storage
-    default: /var/vcap/store/
-
-  #
-  # Amazon S3 storage
-  #
-  vault.storage.use_s3:
-    description: Use S3 storage
-    default: false
-  vault.storage.s3.bucket:
-    description: S3 bucket name
-  vault.storage.s3.access_key:
-    description: AWS access key
-  vault.storage.s3.secret_key:
-    description: AWS secret key
-  vault.storage.s3.region:
-    description: AWS region
-    default: us-east-1
-  vault.storage.s3.endpoint:
-    description: AWS S3 endpoint
-  vault.storage.s3.session_token:
-    description: AWS session token
-
-  #
-  # MySQL storage
-  #
-  vault.storage.use_mysql:
-    description: Use MySQL storage
-    default: false
-  vault.storage.mysql.address:
-    description: Specifies the address of the MySQL host (eg. "127.0.0.1:3306")
-  vault.storage.mysql.username:
-    description: Specifies the MySQL username to connect to the database.
-  vault.storage.mysql.password:
-    description: Specifies the MySQL password to connect to the database.
-  vault.storage.mysql.database:
-    description: Specifies the name of the database. If the database does not exist, Vault will attempt to create it.
-  vault.storage.mysql.table:
-    description: Specifies the name of the table. If the table does not exist, Vault will attempt to create it.
-  vault.storage.mysql.tls.ca_certificate:
-    description: Specifies the CA certificate to connect using TLS.
-  vault.storage.mysql.max_parallel:
-    description: Specifies the maximum number of concurrent requests to MySQL.
-    default: 128
-
-  #
-  # Custom storage
-  #
-  vault.storage.custom.type:
-    description: Type of custom storage
-    example: zookeeper
-  vault.storage.custom.options:
-    description: Config options for storage type
-    example: |
-      address: localhost:2181
-      path: vault/
-
-  #
-  # Google Cloud storage
-  #
-  vault.storage.use_google_cloud:
-    description: Use Google Cloud storage
-    default: false
-  vault.storage.google_cloud.bucket:
-    description: Google Cloud bucket name
-  vault.storage.google_cloud.credentials:
-    description: Platform service account private key file in JSON format.
+  tls:
+    description: SSL certificate PEM or an array of SSL certificate PEM files

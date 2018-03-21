@@ -1,3 +1,0 @@
-- type: replace
-  path: /variables/name=vault-tls/options/alternative_names/-
-  value: ((vault-alternative-name))

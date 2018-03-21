@@ -1,0 +1,15 @@
+<%
+if_p("tls") do |tls|
+  if !tls.is_a?(Array)
+    tls = [tls]
+  end
+  tls.each do |cert_entry|
+%>
+========================== 0644 /var/vcap/jobs/vault/tls/<%= cert_entry["name"] %>/cert.pem
+<%= cert_entry["cert"] %>
+========================== 0644 /var/vcap/jobs/vault/tls/<%= cert_entry["name"] %>/key.pem
+<%= cert_entry["key"] %>
+<%
+  end
+end
+%>

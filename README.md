@@ -87,19 +87,68 @@ utility for Vault that provides higher-level abstractions like
 tree-based listing, secret generation, secure terminal password
 entry, etc.
 
+## Configuration
 
-High Availability Concerns
---------------------------
+### Template Strings
+As the base manifest shows, a full HCL configuration can be assigned to the `vault.config` property. If you're using 
+Vault in HA mode (which is recommended) you'll probably need to set values like `redirect_address` and `cluster_address`.
+The `vault.config` property supports the following template strings to make setting these values easier: 
 
-If you put important things in your Vault, you want it to be
-available, so you can get those important things back out again.
+**`(ip)`**
 
-Enter High Availability.
+During deployment this value will be replaced with the IP address of the instance. This will not include the protocol or
+any port information. For example for an IP based configuration:
 
-The easiest way to do high availability is to run 3 or more nodes,
-and use the Consul storage.
+```hcl
+storage "consul"{
+  path = "vault/"
+  check_timeout = "5s"
+  max_parallel = "128"
+  cluster_address = "https://(ip):8200"
+  redirect_address = "https://(ip):8200"
+}
+```
 
-Fortunately, the `manifests/vault.yml` manifest in the [Usage](#usage) section above is already a 3-node high availability cluster.
+**`(index)`**
+
+During deployment this value will be replaced with the index of the instance. This can be particularly useful for DNS
+configuration values. For example, if you were deploying 3 instances, this would ensure each one had a unique DNS value
+in its configuration:
+
+```hcl
+storage "consul"{
+  path = "vault/"
+  check_timeout = "5s"
+  max_parallel = "128"
+  cluster_address = "https://prod-vault-(index).yoursite.biz"
+  redirect_address = "https://prod-vault-(index).yoursite.biz"
+}
+```
+
+### Certificate Management
+
+Your Vault configuration is likely going to require TLS certificates on the instance. This Bosh release's `tls` property can
+be used to provide these certificates:
+
+```yaml
+tls:
+  - name: "my_tls_cert"
+    cert: | 
+      -----BEGIN CERTIFICATE-----
+      CertBlockAsRawText
+      -----END CERTIFICATE-----
+    key: ((or_use_a_variable))
+  - name: "other_tls_cert"
+    cert: ((other_tls_certificate_content))
+    key: ((other_tls_key_content))
+```
+
+The above configuration will create the following files on the Vault instance before starting Vault:
+  - `/var/vcap/jobs/vault/tls/my_tls_cert/cert.pem`
+  - `/var/vcap/jobs/vault/tls/my_tls_cert/key.pem`
+  - `/var/vcap/jobs/vault/tls/other_tls_cert/cert.pem`
+  - `/var/vcap/jobs/vault/tls/other_tls_cert/key.pem`
+
 
 Zero Downtime Updates
 ---------------------
@@ -149,37 +198,6 @@ vault rekey
 ```
 
 See https://www.vaultproject.io/guides/rekeying-and-rotating.html for additional instructions
-
-Cloud Foundry Service Broker
-----------------------------
-
-Cloud Foundry developers/users can also access the multi-tenant Vault deployment via the Cloud Foundry service broker [`vault-broker`](https://github.com/cloudfoundry-community/vault-broker).
-
-Once you have deployed vault once, initialized it, and obtained the token, you can now re-deploy Vault with the token to enable the service broker:
-
-```
-cf_deployment=<name of cf deployment in BOSH, e.g. 'cf'>
-system_domain=$(bosh -d $cf_deployment manifest | bosh int - --path /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/system_domain)
-skip_verify=$(bosh -d $cf_deployment manifest | bosh int - --path /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/ssl/skip_cert_verify)
-admin_password=$(bosh -d $cf_deployment manifest | bosh int - --path /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/scim/users/name=admin/password)
-
-bosh deploy manifests/vault.yml --vars-store tmp/creds.yml \
-  -o manifests/operators/servicebroker.yml \
-  -v "cf-system-domain=$system_domain" \
-  -v cf-api-url=https://api.$system_domain \
-  -v cf-skip-ssl-validation=$skip_verify \
-  -v cf-admin-username=admin \
-  -v "cf-admin-password=$admin_password" \
-  -v "vault-token=<token from vault init>"
-```
-
-NOTE: if you are using Credhub then consider inserting `vault-token` and `cf-admin-password` as a secret into Credhub rather than pass it as `-v` argument above.
-
-To register the service broker with Cloud Foundry:
-
-```
-bosh run-errand broker-registrar
-```
 
 [BOSH]:      https://bosh.io
 [vault]:     https://vaultproject.io
