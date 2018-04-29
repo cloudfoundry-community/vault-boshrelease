@@ -4,5 +4,5 @@
   value: ((vm-type))
 
 - type: replace
-  path: /instance_groups/name=vault/persistent_disk_type
+  path: /instance_groups/name=vault/persistent_disk_type?
   value: ((persistent-disk-type))
