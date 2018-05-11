@@ -103,12 +103,12 @@ of the instance. This will not include the protocol or any port
 information. For example for an IP based configuration:
 
 ```hcl
-storage "consul"{
+storage "consul" {
   path = "vault/"
-  check_timeout    = "5s"
-  max_parallel     = "128"
-  cluster_address  = "https://(ip):8200"
-  redirect_address = "https://(ip):8200"
+  check_timeout = "5s"
+  max_parallel = "128"
+  disable_clustering = "false"
+  cluster_addr  = "https://(ip):8201"
 }
 ```
 
@@ -121,12 +121,12 @@ instances, this would ensure each one had a unique DNS value in
 its configuration::
 
 ```hcl
-storage "consul"{
+storage "consul" {
   path = "vault/"
-  check_timeout    = "5s"
-  max_parallel     = "128"
-  cluster_address  = "https://prod-vault-(index).yoursite.biz"
-  redirect_address = "https://prod-vault-(index).yoursite.biz"
+  check_timeout = "5s"
+  max_parallel = "128"
+  disable_clustering = "false"
+  cluster_addr  = "https://vault-(index).yoursite.biz"
 }
 ```
 
