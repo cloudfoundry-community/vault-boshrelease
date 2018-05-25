@@ -160,6 +160,11 @@ Vault instance before starting Vault:
   - `/var/vcap/jobs/vault/tls/other_tls_cert/cert.pem`
   - `/var/vcap/jobs/vault/tls/other_tls_cert/key.pem`
 
+**WARNING** Prior to 1.0.0 release, the `VAULT_SKIP_VERIFY` environment variable is set
+if the vault address contains `https`, so connecting to
+the vault server on 127.0.0.1 (during unseal) would not throw an SSL exception. With 1.0.0
+release, the environmental variable is no longer  set  by default. The proper solution is 
+to include SAN entry of `127.0.0.1` in the vault certs.
 
 Zero Downtime Updates
 ---------------------
