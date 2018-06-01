@@ -160,15 +160,27 @@ Vault instance before starting Vault:
   - `/var/vcap/jobs/vault/tls/other_tls_cert/cert.pem`
   - `/var/vcap/jobs/vault/tls/other_tls_cert/key.pem`
 
-**WARNING** Prior to 1.0.0 release, the `VAULT_SKIP_VERIFY` environment variable is set
+### Monit Script Configuration
+
+In order to enable features like zero downtime redeploys this Bosh release 
+bundles scripts that utilize the Vault CLI. Manifest properties are available to 
+explicitly set the value of the `VAULT_SKIP_VERIFY` and `VAULT_ADDR` 
+environment variables in the context of these monit scripts:
+```yaml
+  properties:
+    vault:
+      tls_skip_verify: false                      #default if absent
+      addr:            "https://127.0.0.1:8200"   #default if absent
+```
+Prior to 1.0.0 release, the `VAULT_SKIP_VERIFY` environment variable is set
 if the vault address contains `https`, so connecting to
 the vault server on 127.0.0.1 (during unseal) would not throw an SSL exception. Since 1.0.0
 release, the environmental variable is no longer  set  by default. There are several possible
 ways to address the situation.
 - If you have **only one** vault node, you can use `properties.vault.addr` to set
-  `VAULT_ADDR` environmental variable.
+  `VAULT_ADDR` environmental variable according to your cert CN.
 - If you have more than one nodes, **and** can use SAN IP entry of `127.0.0.1` in your certs, leave out
-  `properties.vault.addr` (defaults to `https://127.0.0.1:8200`).
+  `properties.vault.addr` (using the default).
 - If you have more than one nodes, and can _NOT_ use SAN IP entry of `127.0.0.1` in your certs, you 
   need to specify `properties.vault.skip_verify`, and leave out `properties.vault.addr`. This breaks
   the [security model](https://www.vaultproject.io/docs/commands/index.html#vault_skip_verify), though
