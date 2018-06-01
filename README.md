@@ -162,9 +162,17 @@ Vault instance before starting Vault:
 
 **WARNING** Prior to 1.0.0 release, the `VAULT_SKIP_VERIFY` environment variable is set
 if the vault address contains `https`, so connecting to
-the vault server on 127.0.0.1 (during unseal) would not throw an SSL exception. With 1.0.0
-release, the environmental variable is no longer  set  by default. The proper solution is 
-to include SAN entry of `127.0.0.1` in the vault certs.
+the vault server on 127.0.0.1 (during unseal) would not throw an SSL exception. Since 1.0.0
+release, the environmental variable is no longer  set  by default. There are several possible
+ways to address the situation.
+- If you have **only one** vault node, you can use `properties.vault.addr` to set
+  `VAULT_ADDR` environmental variable.
+- If you have more than one nodes, **and** can use SAN IP entry of `127.0.0.1` in your certs, leave out
+  `properties.vault.addr` (defaults to `https://127.0.0.1:8200`).
+- If you have more than one nodes, and can _NOT_ use SAN IP entry of `127.0.0.1` in your certs, you 
+  need to specify `properties.vault.skip_verify`, and leave out `properties.vault.addr`. This breaks
+  the [security model](https://www.vaultproject.io/docs/commands/index.html#vault_skip_verify), though
+  minor since the communication is at the local host.
 
 Zero Downtime Updates
 ---------------------
