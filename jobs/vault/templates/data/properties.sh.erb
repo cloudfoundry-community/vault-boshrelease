@@ -10,7 +10,7 @@ export JOB_INDEX=<%= index %>
 export JOB_FULL="$NAME/$JOB_INDEX"
 
 <%
-vault_addr=p("vault.addr", "127.0.0.1")
+vault_addr=p("vault.addr", "https://127.0.0.1:8200")
 tls_skip_verify=p("vault.skip_verify", "false")
 %>
 export VAULT_ADDR="<%= vault_addr %>"
