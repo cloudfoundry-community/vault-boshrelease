@@ -14,6 +14,14 @@ templates:
   config/vault.conf.erb:  config/server.hcl
   tls/certs.ttar: tls/certs.ttar
 properties:
+  vault.skip_verify:
+    description: Do not verify Vault's presented certificate before communicating with it. Set in the environment when monit scripts run the Vault CLI
+    default: false
+
+  vault.addr:
+    description: Address of the Vault server expressed as a URL and port. Set in the environment when monit scripts run the Vault CLI
+    default: https://127.0.0.1:8200
+
   vault.config:
     description: HCL string literal representing the full Vault configuration, will take precedence over any other configuration properties
 

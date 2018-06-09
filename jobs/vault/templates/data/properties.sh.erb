@@ -10,10 +10,11 @@ export JOB_INDEX=<%= index %>
 export JOB_FULL="$NAME/$JOB_INDEX"
 
 <%
-vault_addr=p("vault.address", "")
+vault_addr=p("vault.addr", "https://127.0.0.1:8200")
+tls_skip_verify=p("vault.skip_verify", "false")
 %>
 export VAULT_ADDR="<%= vault_addr %>"
 export VAULT_TOKEN="<%= p("vault.update.step_down_token","") %>"
-<% if vault_addr.include? "https" %>
+<% if tls_skip_verify.to_s == "true" %>
 export VAULT_SKIP_VERIFY=1
 <% end %>

@@ -6,6 +6,7 @@ if [[ "$(cat "${JOB_DIR}/data/unseal_keys" | wc -l)" -gt 2 ]]; then
   cat "${JOB_DIR}/data/unseal_keys" | \
     while read key
     do
-      vault unseal ${key}
+      key=$(echo "$key" | tr -d '[:space:]')
+      [[ -n "$key" ]] && vault unseal ${key} || echo "skip empty key"
     done
 fi
