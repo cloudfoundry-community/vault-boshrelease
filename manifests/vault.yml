@@ -32,7 +32,7 @@ instance_groups:
           }
       tls:
         - name: vault
-          cert: ((vault-tls.certificate))
+          cert: ((vault-tls.certificate))((vault-ca.certificate))
           key: ((vault-tls.private_key))
 update:
   canaries: 1
