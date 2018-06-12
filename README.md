@@ -162,29 +162,38 @@ Vault instance before starting Vault:
 
 ### Monit Script Configuration
 
-In order to enable features like zero downtime redeploys this Bosh release 
-bundles scripts that utilize the Vault CLI. Manifest properties are available to 
-explicitly set the value of the `VAULT_SKIP_VERIFY` and `VAULT_ADDR` 
+In order to enable features like zero downtime redeploys this Bosh release
+bundles scripts that utilize the Vault CLI. Manifest properties are available to
+explicitly set the value of the `VAULT_SKIP_VERIFY` and `VAULT_ADDR`
 environment variables in the context of these monit scripts:
+
 ```yaml
   properties:
     vault:
-      tls_skip_verify: false                      #default if absent
-      addr:            "https://127.0.0.1:8200"   #default if absent
+      skip_verify: false                      #default if absent
+      addr:        "https://127.0.0.1:8200"   #default if absent
 ```
-Prior to 1.0.0 release, the `VAULT_SKIP_VERIFY` environment variable is set
-if the vault address contains `https`, so connecting to
-the vault server on 127.0.0.1 (during unseal) would not throw an SSL exception. Since 1.0.0
-release, the environmental variable is no longer  set  by default. There are several possible
+
+Prior to 1.0.0 release, the `VAULT_SKIP_VERIFY` environment
+variable is set if the vault address contains `https`, so
+connecting to the vault server on 127.0.0.1 (during unseal) would
+not throw an SSL exception. Since 1.0.0 release, the environmental
+variable is no longer  set  by default. There are several possible
 ways to address the situation.
-- If you have **only one** vault node, you can use `properties.vault.addr` to set
-  `VAULT_ADDR` environmental variable according to your cert CN.
-- If you have more than one nodes, **and** can use SAN IP entry of `127.0.0.1` in your certs, leave out
-  `properties.vault.addr` (using the default).
-- If you have more than one nodes, and can _NOT_ use SAN IP entry of `127.0.0.1` in your certs, you 
-  need to specify `properties.vault.skip_verify`, and leave out `properties.vault.addr`. This breaks
-  the [security model](https://www.vaultproject.io/docs/commands/index.html#vault_skip_verify), though
-  minor since the communication is at the local host.
+
+- If you have **only one** vault node, you can use
+  `properties.vault.addr` to set `VAULT_ADDR` environmental variable
+  according to your cert CN.
+
+- If you have more than one nodes, **and** can use SAN IP entry of
+  `127.0.0.1` in your certs, leave out `properties.vault.addr`
+  (using the default).
+
+- If you have more than one nodes, and can _NOT_ use SAN IP entry
+  of `127.0.0.1` in your certs, you need to specify
+  `vault.skip_verify`, and leave out `vault.addr`. This breaks the
+  [security model][security], though minor since the communication
+  is at the local host.
 
 Zero Downtime Updates
 ---------------------
@@ -205,9 +214,9 @@ Policy 'step-down' written.
 $ vault token-create -policy="step-down" -display-name="step-down" -no-default-policy -orphan
 Key             Value
 ---             -----
-token          	STEP-DOWN-TOKEN
-token_accessor 	cf37c98a-685a-1cf0-fc2e-4bd21a4a6be2
-token_duration 	768h0m0s
+token           STEP-DOWN-TOKEN
+token_accessor  cf37c98a-685a-1cf0-fc2e-4bd21a4a6be2
+token_duration  768h0m0s
 token_renewable true
 token_policies  [step-down]
 ```
@@ -261,3 +270,4 @@ for additional instructions.
 [ci]:        https://ci.starkandwayne.com/teams/main/pipelines/vault-boshrelease
 [safe]:      https://github.com/starkandwayne/safe
 [rekey]:     https://www.vaultproject.io/guides/rekeying-and-rotating.html
+[security]:  https://www.vaultproject.io/docs/commands/index.html#vault_skip_verify
