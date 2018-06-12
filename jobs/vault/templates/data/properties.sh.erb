@@ -11,6 +11,9 @@ export JOB_FULL="$NAME/$JOB_INDEX"
 
 <%
 vault_addr=p("vault.addr", "https://127.0.0.1:8200")
+vault_addr.gsub!('(index)', spec.index.to_s)
+vault_addr.gsub!('(ip)', spec.ip)
+
 tls_skip_verify=p("vault.skip_verify", "false")
 %>
 export VAULT_ADDR="<%= vault_addr %>"
