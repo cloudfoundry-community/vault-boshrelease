@@ -11,7 +11,9 @@
 
 - The new `vault.addr` property allows you to target the correct
   IP or domain name, in the event that you are using a real,
-  trusted X.509 certificate.
+  trusted X.509 certificate.  This property honors the replacement
+  tokens `(ip)` and `(index)` in case you want to name your Vaults
+  after their index.
 
 # Bug Fixes
 
