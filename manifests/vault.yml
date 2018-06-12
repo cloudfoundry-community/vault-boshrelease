@@ -7,7 +7,7 @@ name: vault
 
 instance_groups:
 - name: vault
-  instances: 3
+  instances: 1
   vm_type: default
   stemcell: trusty
   azs: [z1]
@@ -21,7 +21,7 @@ instance_groups:
       vault:
         config: |
           storage "file" {
-            path = "/var/vcap/jobs/vault/data"
+            path = "/var/vcap/store/vault/data"
           }
 
           listener "tcp" {
