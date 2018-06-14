@@ -92,7 +92,7 @@ entry, etc.
 As the base manifest shows, a full HCL configuration can be
 assigned to the `vault.config` property. If you're using Vault in
 HA mode (which is recommended) you'll probably need to set values
-like `redirect_address` and `cluster_address`.  The `vault.config`
+like `api_addr` and `cluster_address`.  The `vault.config`
 property supports the following template strings to make setting
 these values easier:
 
@@ -107,9 +107,9 @@ storage "consul" {
   path = "vault/"
   check_timeout = "5s"
   max_parallel = "128"
-  disable_clustering = "false"
-  cluster_addr  = "https://(ip):8201"
 }
+api_addr = "http://(ip):8200"
+cluster_addr = "https://(ip):8201"
 ```
 
 **`(index)`**
@@ -125,11 +125,10 @@ storage "consul" {
   path = "vault/"
   check_timeout = "5s"
   max_parallel = "128"
-  disable_clustering = "false"
-  cluster_addr  = "https://vault-(index).yoursite.biz"
 }
+api_addr = "http://vault-(index).yoursite.biz:8200"
+cluster_addr = "https://vault-(index).yoursite.biz:8201"
 ```
-
 ### Certificate Management
 
 Your Vault configuration is likely going to require TLS. This
