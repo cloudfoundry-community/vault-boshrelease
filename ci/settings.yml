@@ -1,30 +1,30 @@
 ---
 meta:
   name:    vault
-  target:  sw
-  url:     https://ci.starkandwayne.com
+  target:  pipes
+  url:     https://pipes.starkandwayne.com
 
   initial_version: 0.2.1
 
   bosh-lite:
-    target: https://10.58.111.44:25555
-    username: (( vault "secret/bosh-lites/lite44/users/admin:username" ))
-    password: (( vault "secret/bosh-lites/lite44/users/admin:password" ))
-    cacert:   (( vault "secret/bosh-lites/lite44/certs:rootCA.pem" ))
+    target: https://10.200.131.9:25555
+    username: ((thunder-dome.username))
+    password: ((thunder-dome.password))
+    cacert:   ((thunder-dome.ca-certificate))
 
   aws:
-    access_key: (( vault "secret/aws/cfcommunity:access" ))
-    secret_key: (( vault "secret/aws/cfcommunity:secret" ))
+    access_key: ((cfcommunity.access))
+    secret_key: ((cfcommunity.secret))
 
   github:
     owner:  cloudfoundry-community
     repo:   vault-boshrelease
     branch: master
-    private_key:  (( vault "secret/pipelines/shared/github:private" ))
-    access_token: (( vault "secret/pipelines/shared/github:access_token" ))
+    private_key:  ((github.private-key))
+    access_token: ((github.access-token))
 
   slack:
-    webhook: (( vault "secret/pipelines/vault-boshrelease/slack:webhook" ))
+    webhook: ((slack.webhook))
     channel: '#vault'
     username:      starkandwayne-ci
     icon:          https://www.starkandwayne.com/assets/images/shield-blue-50x50.png
