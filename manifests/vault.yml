@@ -66,6 +66,6 @@ stemcells:
 
 releases:
 - name: vault
-  version: 1.0.4
-  url: https://github.com/cloudfoundry-community/vault-boshrelease/releases/download/v1.0.4/vault-1.0.4.tgz
-  sha1: 7b959b9dda46d63daadf5aa137b661d889cb3501
+  version: 1.1.0
+  url: https://github.com/cloudfoundry-community/vault-boshrelease/releases/download/v1.1.0/vault-1.1.0.tgz
+  sha1: 587ce3c781951351b198b022862263a067f721ad

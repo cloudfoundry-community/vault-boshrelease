@@ -1,0 +1,33 @@
+name: vault
+version: 1.1.0
+commit_hash: 7be858e
+uncommitted_changes: false
+jobs:
+- name: sanity-test
+  version: 3a9dfb22c9f575fdbfe2c60ec7215d9bf9966e8a
+  fingerprint: 3a9dfb22c9f575fdbfe2c60ec7215d9bf9966e8a
+  sha1: 585183b64d469fa96b389a98ba9a7eebed21e042
+- name: vault
+  version: 582f383129daeb70886d465342b5412c432d4594
+  fingerprint: 582f383129daeb70886d465342b5412c432d4594
+  sha1: 3723c4e7352f00568281dcbbcffa0d41da1e67e8
+packages:
+- name: jq
+  version: f502bfc65e67f129d21866f86e68f8458bd0ae28
+  fingerprint: f502bfc65e67f129d21866f86e68f8458bd0ae28
+  sha1: d47cedc0602f1f3c33b49c91c02c7953746c557b
+  dependencies: []
+- name: ttar
+  version: 3fa6de5444a3a604a92881d7186eadaef4e0323b
+  fingerprint: 3fa6de5444a3a604a92881d7186eadaef4e0323b
+  sha1: 7e39078385c5f96b9029c200cca4346742a6b589
+  dependencies: []
+- name: vault
+  version: d71098b97d40036c581f62774d835844cf3b3de1
+  fingerprint: d71098b97d40036c581f62774d835844cf3b3de1
+  sha1: a2449ff3bf975691f78a99e76c4119e9cce2238f
+  dependencies: []
+license:
+  version: 643fdf9d42370280da7ea22848661d84979395a7
+  fingerprint: 643fdf9d42370280da7ea22848661d84979395a7
+  sha1: 5efb1e1006afdc2e2c40d3283903ac361a36e701
