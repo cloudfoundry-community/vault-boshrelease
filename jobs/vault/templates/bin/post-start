@@ -1,12 +1,15 @@
 #!/bin/bash
 
-source /var/vcap/jobs/vault/helpers/ctl_setup.sh 'vault'
+set -x
+
+source /var/vcap/jobs/vault/data/properties.sh
+JOB_DIR=/var/vcap/jobs/vault
 
 if [[ "$(cat "${JOB_DIR}/data/unseal_keys" | wc -l)" -gt 2 ]]; then
   cat "${JOB_DIR}/data/unseal_keys" | \
     while read key
     do
       key=$(echo "$key" | tr -d '[:space:]')
-      [[ -n "$key" ]] && vault unseal ${key} || echo "skip empty key"
+      [[ -n "$key" ]] && /var/vcap/packages/vault/bin/vault operator unseal ${key}  || echo "skip empty key"
     done
 fi
