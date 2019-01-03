@@ -9,7 +9,7 @@ instance_groups:
 - name: vault
   instances: 1
   vm_type: default
-  stemcell: trusty
+  stemcell: xenial
   azs: [z1]
   networks: [{name: default}]
   persistent_disk: 10240
@@ -60,8 +60,8 @@ variables:
     - "*.vault.default.vault.bosh"
 
 stemcells:
-- alias: trusty
-  os: ubuntu-trusty
+- alias: xenial
+  os: ubuntu-xenial
   version: latest
 
 releases:

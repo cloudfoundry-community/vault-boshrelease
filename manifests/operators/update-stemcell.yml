@@ -1,0 +1,10 @@
+- type: replace
+  path: /instance_groups/name=vault/stemcell?
+  value: ((stemcell_alias))
+  
+- type: replace
+  path: /stemcells/-
+  value:
+    alias: ((stemcell_alias))
+    os: ((stemcell_os))
+    version: latest
