@@ -26,6 +26,7 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
     inflate_certs
+    inflate_additional_configs
 
     # store pid in $PIDFILE
     echo $$ > $PIDFILE
