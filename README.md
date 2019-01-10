@@ -159,6 +159,26 @@ Vault instance before starting Vault:
   - `/var/vcap/jobs/vault/tls/other_tls_cert/cert.pem`
   - `/var/vcap/jobs/vault/tls/other_tls_cert/key.pem`
 
+### Management of Additional Configuration Files
+
+Vault's configuration supports lots of cool features that sometimes require additional configuration files be present.
+An example of this is GCP auto unsealing. To support these kinds of cases this Bosh release provides the 
+`additional_config` property.
+
+```
+properties:
+  vault:
+    additional_config:
+      - name: gcp.json
+        config: |
+          {
+            "some":"valid_json"
+          }
+```
+
+The above configuration will create the file `/var/vcap/jobs/vault/config/gcp.json` on the Vault instance before 
+starting Vault.
+
 ### Monit Script Configuration
 
 In order to enable features like zero downtime redeploys this Bosh release

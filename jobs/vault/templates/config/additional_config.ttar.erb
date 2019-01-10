@@ -1,0 +1,13 @@
+<%
+if_p("additional_config") do |confs|
+  if !confs.is_a?(Array)
+    confs = [confs]
+  end
+  confs.each do |conf|
+%>
+========================== 0644 /var/vcap/jobs/vault/config/<%= conf["name"] %>
+<%= conf["config"] %>
+<%
+  end
+end
+%>

@@ -16,6 +16,11 @@ inflate_certs() {
 	ttar < ${JOB_DIR}/tls/certs.ttar
 }
 
+inflate_additional_configs() {
+    # reconstitute additional configurations like GCP creds file that may be necessary
+    ttar < ${JOB_DIR}/config/additional_config.ttar
+}
+
 case $1 in
 
   start)
