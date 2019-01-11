@@ -36,10 +36,10 @@ properties:
   # TLS
   #
   tls:
-    description: SSL certificate PEM or an array of SSL certificate PEM files
+    description: SSL certificate PEM or an array of SSL certificate PEM files. See the README for example configuration.
 
   #
   # Additional or suplimental configuration files
   #
   additional_config:
-    description: A place to provide file names and body content for additional configuration files that may be necessary. For example a GCP credentials file.
+    description: A place to provide file names and body content for additional configuration files that may be necessary. For example a GCP credentials file. See the README for example configuration.
