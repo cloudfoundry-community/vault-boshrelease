@@ -12,6 +12,7 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
   config/vault.conf.erb:  config/server.hcl
+  config/additional_config.ttar.erb: config/additional_config.ttar
   tls/certs.ttar: tls/certs.ttar
 properties:
   vault.skip_verify:
@@ -35,4 +36,10 @@ properties:
   # TLS
   #
   tls:
-    description: SSL certificate PEM or an array of SSL certificate PEM files
+    description: SSL certificate PEM or an array of SSL certificate PEM files. See the README for example configuration.
+
+  #
+  # Additional or suplimental configuration files
+  #
+  additional_config:
+    description: A place to provide file names and body content for additional configuration files that may be necessary. For example a GCP credentials file. See the README for example configuration.
