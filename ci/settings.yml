@@ -16,6 +16,10 @@ meta:
     access_key: ((cfcommunity.access))
     secret_key: ((cfcommunity.secret))
 
+  git:
+    name:  Stark & Wayne CI Bot
+    email: ci@starkandwayne.com
+
   github:
     owner:  cloudfoundry-community
     repo:   vault-boshrelease
@@ -23,19 +27,16 @@ meta:
     private_key:  ((github.private-key))
     access_token: ((github.access-token))
 
-  slack:
-    webhook: ((slack.webhook))
-    channel: '#vault'
-    username:      starkandwayne-ci
-    icon:          https://www.starkandwayne.com/assets/images/shield-blue-50x50.png
-    blob_success:  '(( concat "$BUILD_PIPELINE_NAME: New version of $BUILD_JOB_NAME was detected, and updated in master. <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME| Cut a new release?>" ))'
-    blob_failure:  '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update the blob for $BUILD_JOB_NAME>" ))'
+  shout:
+    url:      http://10.200.131.1:7109
+    username: ops
+    password: (( vault "secret/buffalo/lab/concourse/shout/ops:password" ))
 
 resource_types:
-- name: hashicorp-release
-  type: docker-image
-  source:
-    repository: starkandwayne/hashicorp-release-resource
+  - name: hashicorp-release
+    type: docker-image
+    source:
+      repository: starkandwayne/hashicorp-release-resource
 
 resources:
   - name: vault
@@ -44,66 +45,65 @@ resources:
       project: vault
 
 groups:
-- name: blobs
-  jobs:
-  - vault
+  - name: blobs
+    jobs: [vault]
 
 jobs:
-- name: vault
-  public: true
-  plan:
-  - aggregate:
-    - { get: git }
-    - { get: vault, trigger: true, params: { regexp: "linux_amd64" }}
-  - task: update-vault
-    config:
-      image_resource:
-        type: docker-image
-        source:
-          repository: (( grab meta.image.name ))
-          tag:        (( grab meta.image.tag ))
-      platform: linux
-      inputs:
-      - name: git
-      - name: vault
-      outputs:
-      - name: pushme
-      run:
-        path: ./git/ci/scripts/update-blob
-      params:
-        REPO_ROOT:   git
-        REPO_OUT:    pushme
-        BLOB_DIR:    vault
-        BLOB_NAME:   vault
-        BLOB_BINARY: vault_*_linux_amd64.zip
-        BLOB_URL:    https://github.com/hashicorp/vault
-        BLOB_CLEANUP:     vault/vault_.*_linux_amd64.zip
-        BLOB_DESTINATION: vault/vault_${VERSION}_linux_amd64.zip
-        AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
-        AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
-        BRANCH:         (( grab meta.github.branch ))
-    on_failure:
-      put: notify
-      params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
-  - put: git
-    params:
-      rebase: true
-      repository: pushme/git
-    on_success:
-      put: notify
-      params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_success ))
-    on_failure:
-      put: notify
-      params:
-        channel:  (( grab meta.slack.channel ))
-        username: (( grab meta.slack.username ))
-        icon_url: (( grab meta.slack.icon ))
-        text:     (( grab meta.slack.blob_failure ))
+  - name: vault
+    public: true
+    plan:
+      - aggregate:
+          - { get: git }
+          - { get: vault, trigger: true, params: { regexp: "linux_amd64" }}
+      - task: update-vault
+        config:
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.image.name ))
+              tag:        (( grab meta.image.tag ))
+          platform: linux
+          inputs:
+            - name: git
+            - name: vault
+          outputs:
+            - name: pushme
+          run:
+            path: ./git/ci/scripts/update-blob
+          params:
+            REPO_ROOT:   git
+            REPO_OUT:    pushme
+            BLOB_DIR:    vault
+            BLOB_NAME:   vault
+            BLOB_BINARY: vault_*_linux_amd64.zip
+            BLOB_URL:    https://github.com/hashicorp/vault
+            BLOB_CLEANUP:     vault/vault_.*_linux_amd64.zip
+            BLOB_DESTINATION: vault/vault_${VERSION}_linux_amd64.zip
+            AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
+            AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
+            BRANCH:         (( grab meta.github.branch ))
+        on_success:
+          put: notify
+          params:
+            topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+            message: updated Vault (based on upstream release).
+            ok:      yes
+            link:    (( grab meta.shout.links.build ))
+        on_failure:
+          put: notify
+          params:
+            topic:   (( concat meta.shout.topic "-$BUILD_JOB_NAME" ))
+            message: failed to update Vault (from upstream release).
+            ok:      no
+            link:    (( grab meta.shout.links.build ))
+      - put: git
+        params:
+          rebase: true
+          repository: pushme/git
+        on_success:
+          put: notify
+          params:
+            topic:   (( concat meta.shout.topic "-new-vault" ))
+            method:  announce
+            message: A new upstream version of Vault now available on master branch.
+            link:    (( grab meta.shout.links.pipeline ))

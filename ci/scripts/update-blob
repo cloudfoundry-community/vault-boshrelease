@@ -1,44 +1,129 @@
 #!/bin/bash
+#
+# ci/scripts/update-blob
+#
+# Script for automatically updating a BOSH blob
+# in a BOSH release, for use in a pipeline.
+#
+# author:  James Hunt <james@niftylogic.com>
 
-set -e
+set -eu
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-: ${BLOB_DIR:?required}
-: ${BLOB_NAME:?required}
-: ${BLOB_BINARY:?required}
-: ${BLOB_CLEANUP:?required}
-: ${BLOB_DESTINATION:?required}
+header() {
+  echo
+  echo "###############################################"
+  echo
+  echo $*
+  echo
+}
+
+######
+######
+######
+header "Checking Concourse Pipeline Environment"
+envok=0
+checkenv() {
+  local name=$1
+  local val=$2
+
+  if [[ -z "$val" ]]; then
+    echo >&2 "The $name variable must be set."
+    envok=1
+  fi
+}
+checkenv REPO_ROOT        "${REPO_ROOT:-}"
+checkenv BLOB_DIR         "${BLOB_DIR:-}"
+checkenv BLOB_NAME        "${BLOB_NAME:-}"
+checkenv BLOB_BINARY      "${BLOB_BINARY:-}"
+checkenv BLOB_CLEANUP     "${BLOB_CLEANUP:-}"
+checkenv BLOB_DESTINATION "${BLOB_DESTINATION:-}"
+checkenv AWS_ACCESS_KEY   "${AWS_ACCESS_KEY:-}"
+checkenv AWS_SECRET_KEY   "${AWS_SECRET_KEY:-}"
+if [[ $envok != 0 ]]; then
+  echo >&2 "Is your Concourse Pipeline misconfigured?"
+  exit 1
+fi
 
 VERSION=$(cat ${BLOB_DIR}/version)
 
-pushd ${REPO_ROOT:?required}
-
-cat <<EOF >config/private.yml
+######
+######
+######
+header "Configuring blobstore (AWS)"
+pushd ${REPO_ROOT}
+cat >config/private.yml <<EOF
 ---
 blobstore:
   provider: s3
   options:
-    access_key_id: ${AWS_ACCESS_KEY:?required}
-    secret_access_key: ${AWS_SECRET_KEY:?required}
+    access_key_id: ${AWS_ACCESS_KEY}
+    secret_access_key: ${AWS_SECRET_KEY}
 EOF
 
-blobs_to_remove=$(spruce json config/blobs.yml | jq -r "keys[] | select(test(\"${BLOB_CLEANUP}\"))")
-if [[ ! -z $blobs_to_remove ]]; then
-  echo "$blobs_to_remove" | xargs -L1 bosh remove-blob
+######
+######
+######
+header "Performing cleanup on old blobs"
+remove=$(spruce json config/blobs.yml | jq -r "keys[] | select(test(\"${BLOB_CLEANUP}\"))")
+if [[ -n $remove ]]; then
+  echo "$remove" | xargs -L1 bosh remove-blob
 fi
 
+######
+######
+######
+if [[ ${BLOB_SOURCE:-} =~ ^http ]]; then
+  header "Fetching blobs from upstream"
+  echo "Fetching blob from upstream $(printf ${BLOB_SOURCE} ${VERSION}) ..."
+  if [[ ${BLOB_SOURCE} =~ .tgz$ ]]; then
+    curl -Lsk $(printf ${BLOB_SOURCE} ${VERSION}) | tar -xzO ${BLOB_BINARY} > ../${BLOB_DIR}/${BLOB_BINARY}
+  else
+    curl -Lsk $(printf ${BLOB_SOURCE} ${VERSION}) > ../${BLOB_DIR}/${BLOB_BINARY}
+  fi
+fi
+
+# remove things that github-release puts in the directory that we don't want.
+rm -f ../${BLOB_DIR}/tag \
+      ../${BLOB_DIR}/body \
+      ../${BLOB_DIR}/version
+
+ls -lah ../${BLOB_DIR}
+
+######
+######
+######
+header "Updating blobs"
 # expand ${VERSION} env var into file path
-eval "blob_destination=${BLOB_DESTINATION}"
-bosh add-blob ../${BLOB_DIR}/${BLOB_BINARY} "${blob_destination}"
+eval "blob_dst=${BLOB_DESTINATION}"
+if [[ "$BLOB_BINARY" == "*" ]]; then
+  for blob_src in ../${BLOB_DIR}/${BLOB_BINARY}; do
+    base=${blob_src##*/}
+    bosh add-blob "${blob_src}" "${blob_dst}/${base}"
+  done
+else
+  bosh add-blob "../${BLOB_DIR}/${BLOB_BINARY}" "${blob_dst}"
+fi
+
+######
+######
+######
+header "Uploading blobs to blobstore (AWS)"
 bosh -n upload-blobs
 rm config/private.yml
 popd
 
+######
+######
+######
+header "Commiting and pushing changes"
 if [[ -n "$(cd ${REPO_ROOT}; git status --porcelain)" ]]; then
   pushd ${REPO_ROOT}
-  cat <<EOF >>ci/release_notes.md
+  cat >>ci/release_notes.md <<EOF
 
 # ${BLOB_NAME}
-Bumped ${BLOB_URL} to v${VERSION}
+
+- Bumped ${BLOB_NAME} to v${VERSION}
 EOF
   popd
 
@@ -59,3 +144,9 @@ fi
 
 # so that future steps in the pipeline can push our changes
 cp -a ${REPO_ROOT} ${REPO_OUT}
+
+echo
+echo
+echo
+echo "SUCCESS"
+exit 0
