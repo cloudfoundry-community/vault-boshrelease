@@ -99,10 +99,10 @@ eval "blob_dst=${BLOB_DESTINATION}"
 if [[ "$BLOB_BINARY" == "*" ]]; then
   for blob_src in ../${BLOB_DIR}/${BLOB_BINARY}; do
     base=${blob_src##*/}
-    bosh add-blob "${blob_src}" "${blob_dst}/${base}"
+    bosh add-blob ${blob_src} ${blob_dst}/${base}
   done
 else
-  bosh add-blob "../${BLOB_DIR}/${BLOB_BINARY}" "${blob_dst}"
+  bosh add-blob ../${BLOB_DIR}/${BLOB_BINARY} ${blob_dst}
 fi
 
 ######
