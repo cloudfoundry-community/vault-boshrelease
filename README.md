@@ -52,7 +52,7 @@ Next you need to initialize the Vault. Connect via port `:8200`:
 ```
 $ export VAULT_ADDR=https://10.244.0.187:8200
 $ export VAULT_SKIP_VERIFY=true
-$ vault init
+$ vault operator init
 ```
 
 This generates a root encryption key for encrypting all of the
@@ -60,16 +60,16 @@ secrets.  At this point, the vault is _sealed_, and you will need
 to unseal it three times, each time with a different key:
 
 ```
-$ vault unseal
-$ vault unseal
-$ vault unseal
+$ vault operator unseal
+$ vault operator unseal
+$ vault operator unseal
 ```
 
 Once unsealed, your Vault should be ready for authentication with
 your _initial root token_:
 
 ```
-$ vault auth
+$ vault login
 ```
 
 Now, you can put secrets in the Vault, and read them back out (try
@@ -228,9 +228,9 @@ path "sys/step-down" {
 }
 EOF
 
-$ vault policy-write step-down ./step-down.hcl
+$ vault policy write step-down ./step-down.hcl
 Policy 'step-down' written.
-$ vault token-create -policy="step-down" -display-name="step-down" -no-default-policy -orphan
+$ vault token create -policy="step-down" -display-name="step-down" -no-default-policy -orphan
 Key             Value
 ---             -----
 token           STEP-DOWN-TOKEN
@@ -274,9 +274,9 @@ You will provide three of the original unseal keys to `vault
 rekey`, so run it three times to generate new unseal keys:
 
 ```
-$ vault rekey
-$ vault rekey
-$ vault rekey
+$ vault operator rekey
+$ vault operator rekey
+$ vault operator rekey
 ```
 
 See [rekeying and rotating][rekey] (in the Vault documentation)
