@@ -38,7 +38,7 @@ case $1 in
 
   stop)
     if [[ "${VAULT_TOKEN}" != "" ]]; then
-      vault step-down
+      vault operator step-down
     fi
     kill_and_wait $PIDFILE
 
