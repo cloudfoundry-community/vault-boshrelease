@@ -6,8 +6,12 @@ meta:
 
   initial_version: 0.2.1
 
+  git:
+    name:  Stark & Wayne CI Bot
+    email: ci@starkandwayne.com
+
   bosh-lite:
-    target: https://10.200.131.9:25555
+    target:   https://10.128.4.73:25555
     username: ((thunder-dome.username))
     password: ((thunder-dome.password))
     cacert:   ((thunder-dome.ca-certificate))
@@ -16,21 +20,17 @@ meta:
     access_key: ((cfcommunity.access))
     secret_key: ((cfcommunity.secret))
 
-  git:
-    name:  Stark & Wayne CI Bot
-    email: ci@starkandwayne.com
-
   github:
-    owner:  cloudfoundry-community
-    repo:   vault-boshrelease
-    branch: master
+    owner:        cloudfoundry-community
+    repo:         vault-boshrelease
+    branch:       master
     private_key:  ((github.private-key))
     access_token: ((github.access-token))
 
   shout:
-    url:      http://10.200.131.1:7109
-    username: ops
-    password: (( vault "secret/buffalo/lab/concourse/shout/ops:password" ))
+    url:      http://10.128.4.65:7109
+    username: ((shout.username))
+    password: ((shout.password))
 
 resource_types:
   - name: hashicorp-release
@@ -52,7 +52,7 @@ jobs:
   - name: vault
     public: true
     plan:
-      - aggregate:
+      - in_parallel:
           - { get: git }
           - { get: vault, trigger: true, params: { regexp: "linux_amd64" }}
       - task: update-vault

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#
+# ci/scripts/rc
+#
+# Script for doing some last-minute, pre-shipit
+# checks, like verifying that we actually wrote
+# release notes for the next cut.
+#
+# author:  James Hunt <james@niftylogic.com>
+# created: 2017-03-23
+#
+
+ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )
+cd $ROOT
+
+if [[ $(git log -1 --format=%aE) = "ci@starkandwayne.com" ]]; then
+	echo "Skipping Release Notes check; commit was from CI Bot:"
+	git --no-pager log -1
+	exit 0
+fi
+
+if [[ ! -s ci/release_notes.md ]]; then
+	cat <<EOF
+
+  Uh-oh.  It looks like someone forgot to write RELEASE NOTES
+
+  Release Notes are an important part of the CI/CD pipeline
+  and the shipping / release process.  They detail the set of
+  changes that have been made since the last release, for people
+  to review before opting to upgrade.
+
+  Ideally, you would write these as changes are made and commits
+  are merged.  Failing that, you really MUST write them before
+  the shipit job is run.
+
+  Release notes must be put in 'ci/release_notes.md'
+
+EOF
+	exit 1
+fi
+
+echo "Release Notes present and accounted for..."
+echo ; echo
+echo "------------------------------------------------"
+cat ci/release_notes.md
+echo "------------------------------------------------"
+exit 0
