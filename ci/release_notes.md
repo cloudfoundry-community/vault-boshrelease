@@ -6,3 +6,7 @@
 # vault
 
 - Bumped vault to v1.2.3+ent.hsm
+
+# vault
+
+- Bumped vault to v1.2.4
