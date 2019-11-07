@@ -10,3 +10,7 @@
 # vault
 
 - Bumped vault to v1.2.4
+
+# vault
+
+- Bumped vault to v1.2.4+ent.hsm
