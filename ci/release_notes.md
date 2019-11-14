@@ -14,3 +14,7 @@
 # vault
 
 - Bumped vault to v1.2.4+ent.hsm
+
+# vault
+
+- Bumped vault to v1.3.0
