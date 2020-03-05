@@ -30,3 +30,7 @@
 # vault
 
 - Bumped vault to v1.3.2
+
+# vault
+
+- Bumped vault to v1.3.3
