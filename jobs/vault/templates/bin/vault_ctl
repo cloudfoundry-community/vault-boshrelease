@@ -8,7 +8,7 @@ source /var/vcap/jobs/vault/helpers/ctl_setup.sh 'vault'
 
 export PORT=${PORT:-5000}
 export LANG=en_US.UTF-8
-export PATH=$PATH:/var/vcap/packges/ttar/bin
+export PATH=$PATH:/var/vcap/packages/ttar/bin
 
 inflate_certs() {
 	# reconstitute certs based on ttar file
