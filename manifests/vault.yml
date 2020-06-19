@@ -24,6 +24,8 @@ instance_groups:
             path = "/var/vcap/store/vault/data"
           }
 
+          ui = true
+
           listener "tcp" {
             address = "0.0.0.0:8200"
             tls_cert_file = "/var/vcap/jobs/vault/tls/vault/cert.pem"
