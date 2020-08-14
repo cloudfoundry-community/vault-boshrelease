@@ -137,18 +137,17 @@ certificates:
 
 ```yaml
 properties:
-  vault:
-    tls:
-      - name: "my_tls_cert"
-        cert: |
-          -----BEGIN CERTIFICATE-----
-          CertBlockAsRawText
-          -----END CERTIFICATE-----
-        key: ((or_use_a_variable))
+  tls:
+    - name: "my_tls_cert"
+      cert: |
+        -----BEGIN CERTIFICATE-----
+        CertBlockAsRawText
+        -----END CERTIFICATE-----
+      key: ((or_use_a_variable))
 
-      - name: "other_tls_cert"
-        cert: ((other_tls_certificate_content))
-        key: ((other_tls_key_content))
+    - name: "other_tls_cert"
+      cert: ((other_tls_certificate_content))
+      key: ((other_tls_key_content))
 ```
 
 The above configuration will create the following files on the
