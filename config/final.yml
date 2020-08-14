@@ -3,4 +3,6 @@ final_name: vault
 blobstore:
   provider: s3
   options:
-    bucket_name: vault-boshrelease
+    bucket_name: gds-paas-build-releases-blobs
+    region: eu-west-1
+    endpoint: https://s3-eu-west-1.amazonaws.com
