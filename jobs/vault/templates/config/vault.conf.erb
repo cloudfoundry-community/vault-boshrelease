@@ -2,7 +2,7 @@
   # If the Vault config was passed in use it as is and exit
   if_p("vault.config") do |vault_config|
     vault_config.gsub!('(index)', spec.index.to_s)
-    vault_config.gsub!('(ip)', spec.ip)
+    vault_config.gsub!('(ip)', spec.ip) unless spec.ip.nil?
 %>
     <%= vault_config %>
 <% end %>
