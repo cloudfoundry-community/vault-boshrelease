@@ -3,6 +3,8 @@ config/settings.yml
 release/*
 *.tgz
 dev_releases
+.final_builds
+.dev_builds
 blobs/*
 .blobs
 .dev_builds
