@@ -10,3 +10,7 @@
 # vault
 
 - Bumped vault to v1.5.1
+
+# vault
+
+- Bumped vault to v1.5.2
