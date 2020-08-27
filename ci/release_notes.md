@@ -14,3 +14,7 @@
 # vault
 
 - Bumped vault to v1.5.2
+
+# vault
+
+- Bumped vault to v1.5.3
