@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -u
+
+HEALTH_RESPONSE=$(curl --fail --insecure --include --silent --max-time 5 \
+--connect-timeout 2 --output /dev/null --write-out '%{http_code}' \
+https://127.0.0.1:8200/v1/sys/health)
+
+if [[ "${HEALTH_RESPONSE}" == "200" ]]; then
+  exit 0
+else
+  exit 1
+fi

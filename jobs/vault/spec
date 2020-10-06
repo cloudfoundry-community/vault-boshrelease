@@ -7,6 +7,7 @@ templates:
   bin/vault_ctl: bin/vault_ctl
   bin/monit_debugger: bin/monit_debugger
   bin/post-start: bin/post-start
+  bin/dns/healthy: bin/dns/healthy
   data/properties.sh.erb: data/properties.sh
   data/unseal_keys.erb:  data/unseal_keys
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
