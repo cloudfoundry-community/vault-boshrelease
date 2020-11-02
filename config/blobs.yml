@@ -6,3 +6,7 @@ vault/vault_1.5.5_linux_amd64.zip:
   size: 51220100
   object_id: a8547711-01a1-4802-67f8-11578d30ef46
   sha: sha256:2a6958e6c8d6566d8d529fe5ef9378534903305d0f00744d526232d1c860e1ed
+golang/go1.15.3.linux-amd64.tar.gz:
+  size: 121097663
+  object_id: 69d4a2aa-6fe9-400f-53dd-6fae04a1f669
+  sha: sha256:010a88df924a81ec21b293b5da8f9b11c176d27c0ee3962dc1738d2352d3c02d
