@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e -x -u -o pipefail
+
+GOROOT=$(readlink -nf /var/vcap/packages/golang)
+export GOROOT
+export PATH=${GOROOT}/bin:${PATH}
+export GOPATH=/var/vcap/go
+export GOCACHE=/var/vcap/gocache
+export GO111MODULE=on
+
+VAULT_INSTALL_TARGET="/var/vcap/packages/vault"
+
+echo "Building Vault CF Auth Plugin ..."
+cd ${BOSH_COMPILE_TARGET}/paas-vault-plugin-auth-cf/
+go build -mod=vendor -o "${BOSH_INSTALL_TARGET}/paas-vault-plugin-auth-cf"
+chmod +x "${BOSH_INSTALL_TARGET}/paas-vault-plugin-auth-cf"
+
+echo "Moving to Vault's plugin directory"
+mkdir -p "/var/vcap/packages/vault/plugins"
+cp "${BOSH_INSTALL_TARGET}/paas-vault-plugin-auth-cf" "${VAULT_INSTALL_TARGET}/plugins/paas-vault-plugin-auth-cf"

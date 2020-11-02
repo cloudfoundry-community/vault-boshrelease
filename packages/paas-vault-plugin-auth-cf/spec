@@ -1,0 +1,9 @@
+---
+name: paas-vault-plugin-auth-cf
+
+dependencies:
+	- golang
+	- vault
+
+files:
+	- paas-vault-plugin-auth-cf/**/*
