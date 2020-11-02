@@ -1,0 +1,3 @@
+[submodule "src/paas-vault-plugin-auth-cf"]
+	path = src/paas-vault-plugin-auth-cf
+	url = https://github.com/alphagov/paas-vault-plugin-auth-cf.git
