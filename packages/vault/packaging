@@ -11,3 +11,5 @@ unzip vault_*_linux_amd64.zip
 
 mkdir $BOSH_INSTALL_TARGET/bin
 cp -a vault $BOSH_INSTALL_TARGET/bin
+
+mkdir $BOSH_INSTALL_TARGET/plugins

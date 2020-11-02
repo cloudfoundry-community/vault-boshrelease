@@ -5,5 +5,7 @@
     vault_config.gsub!('(ip)', spec.ip) unless spec.ip.nil?
 %>
     <%= vault_config %>
+
+    plugin_directory = "/var/vcap/packages/vault/plugins"
 <% end %>
 
