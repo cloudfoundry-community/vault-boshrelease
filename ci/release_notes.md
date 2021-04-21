@@ -46,3 +46,7 @@
 # vault
 
 - Bumped vault to v1.7.0
+
+# vault
+
+- Bumped vault to v1.7.1
